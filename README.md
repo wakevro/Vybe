@@ -33,10 +33,10 @@ This is a spotify playlist generator app that generates music based on user's mo
 - Users are able to swipe through recommendations to add or remove songs to playlist.
 - Users can edit/delete a playlist.
 - Automatically create playlist and sync with Spotify.
+- Users can connect with other users.
 
 **Optional Nice-to-have Stories**
 
-- Users can connect with other users.
 - Users can have a profile displaying playlist.
 
 ### 2. Screen Archetypes
