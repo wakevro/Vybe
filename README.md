@@ -13,7 +13,7 @@ RICHARD ABHULIMHEN - README
 This is a spotify playlist generator app that generates music based on user's mood using sentiment analysis.
 
 ### App Evaluation
-[Evaluation of your app across the following attributes]
+
 - **Category:** Digital Music / Utility / Social
 - **Mobile:** This app would be primarily developed for mobile.
 - **Story:** This is a spotify playlist generator app that generates music based on user's mood. User writes a sentence, then the app analyze the mood of the user using sentiment analysis and generates a swipe view of recommendations. User then have of option of swiping left or right to add a recommended song to a new playlist.
