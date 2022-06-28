@@ -38,28 +38,26 @@ This is a spotify playlist generator app that generates music based on user's mo
 - Fetch User data from Firebase and populate Swiped songs activity.
 - Post to Spotify API once a user swipes for like or dislike.
 - Get preview URL for each song.
+
 ## WEEK 3
-- Allow easy navigation with buttom navigation.
+- Allow easy navigation with bottom navigation.
 - Wrap up every connection with Spotify like creating new playlist, etc.
 - Create an activity for User to describe current mood.
 - Get User's input and work on the sentiment analysis.
-- Read more chatting feature and start to implement.
-- Add basic chat functionality with multiple Users.
+- Get started with implementing maps.
 - Make research on efficient algorithms to analyze each song coming from the API.
 
 ## WEEK 4
-- Finalyze research on algorithm for analyzing each song.
-- Complete chat feature and make it fully functionally.
+- Finalize research on algorithm for analyzing each song.
 - Work with the derived algorithm and analyze each song.
-- Filter songs to display to the User based on alayzed songs.
-- Connect the analysis with User inputted mood.
-- Populate screen with only songs matching User's currnt mood.
-- Wrap up MVP functionality.
+- Filter songs to display to the User based on analyzed songs.
+- Finalize map functionality.
+
 ## WEEK 5
-- Wrap up UI and UX.
-- Extensively test the app.
-- Polish the views and functionality.
+- Add basic chat functionality with multiple Users.
+- Connect the analysis with User inputted mood.
+- Populate screen with only songs matching User's current mood.
+- Wrap up MVP functionality.
 - Improve on features that need improvement.
-- Polish the app again.
 
 
