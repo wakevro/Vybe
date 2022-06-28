@@ -51,6 +51,9 @@ This is a spotify playlist generator app that generates music based on user's mo
 - Finalize research on algorithm for analyzing each song.
 - Work with the derived algorithm and analyze each song.
 - Filter songs to display to the User based on analyzed songs.
+- Allow maps to show markers of users.
+- Allow users to search for specific locations on the map.
+- On zoom in/out show less users or more users
 - Finalize map functionality.
 
 ## WEEK 5
