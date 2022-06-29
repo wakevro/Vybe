@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.Window;
 
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.richard.vybe.R;
@@ -27,7 +26,7 @@ public class MainActivity extends FragmentActivity {
         Log.d(TAG, "STARTED MAIN ACTIVITY");
 
         mViewPager = (ViewPager) findViewById(R.id.pager);
-//        fragmentPagerAdapter = new FragmentPagerAdapter(getSupportFragmentManager());
+        fragmentPagerAdapter = new FragmentPagerAdapter(getSupportFragmentManager());
         Log.d(TAG, "ADAPTER VALUE " + fragmentPagerAdapter);
         mViewPager.setAdapter(fragmentPagerAdapter);
 
