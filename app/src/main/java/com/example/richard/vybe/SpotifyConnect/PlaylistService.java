@@ -2,6 +2,9 @@ package com.example.richard.vybe.SpotifyConnect;
 
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -34,15 +37,22 @@ import okhttp3.Response;
 
 public class PlaylistService {
 
+    private String TAG = "PlaylistService";
+
     private DatabaseReference songDB;
+    private DatabaseReference playlistItemDB;
     private static final String ENDPOINT = EndPoints.PLAYLIST.toString();
     private static final String ENDPOINTME = EndPoints.PLAYLISTME.toString();
+    private static final String ENDPOINTSONGS = EndPoints.PLAYLISTITEMS.toString();
+    private static final String ENDPOINTRECENTLY = EndPoints.RECENTLY_PLAYED.toString();
+    private String ENDPOINTPLAYLISTITEM;
     private SharedPreferences msharedPreferences;
     private RequestQueue mqueue;
     private String URL;
     JSONObject payload;
     private String playlistID;
     private ArrayList<Playlist> playlists = new ArrayList<>();
+    private ArrayList<Song> songs = new ArrayList<>();
     public static final MediaType JSON
             = MediaType.parse("application/json; charset=utf-8");
 
@@ -50,11 +60,15 @@ public class PlaylistService {
     public PlaylistService(RequestQueue queue, SharedPreferences sharedPreferences) {
         mqueue = queue;
         msharedPreferences = sharedPreferences;
-        songDB = FirebaseDatabase.getInstance().getReference().child(msharedPreferences.getString("userid", "")).child("Tracks");
+        songDB = FirebaseDatabase.getInstance().getReference().child(msharedPreferences.getString("username", "") + " " + msharedPreferences.getString("userid", "")).child("Tracks");
     }
 
     public ArrayList<Playlist> getPlaylists() {
         return playlists;
+    }
+
+    public ArrayList<Song> getPlaylistsSongs() {
+        return songs;
     }
 
     public void get(final VolleyCallBack callBack) {
@@ -67,12 +81,16 @@ public class PlaylistService {
                 for (int n = 0; n < jsonArray.length(); n++) {
                     try {
                         JSONObject jsonObject = jsonArray.getJSONObject(n);
+                        Log.i(TAG, "PLAYLIST: " + jsonObject.toString());
                         Playlist playlist = gson.fromJson(jsonObject.toString(), Playlist.class);
                         try {
                             playlist.setImageURL(jsonObject.optJSONArray("images").optJSONObject(0).getString("url"));
                         } catch (NullPointerException e) {
                             playlist.setImageURL(null);
                         }
+                        playlist.setTotalTracks(jsonObject.getJSONObject("tracks").getInt("total"));
+                        Log.i(TAG, "PLAYLIST TOTAL: " + playlist.getTotalTracks());
+
                         playlists.add(playlist);
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -99,10 +117,10 @@ public class PlaylistService {
     }
 
 
-    public void put(Song song) {
+    public void put(Song song, String playlistID) {
         JSONObject payload = preparePayload(song);
 
-        playlistID = msharedPreferences.getString("playlist", "");
+//        playlistID = msharedPreferences.getString("playlist", "");
         URL = String.format(ENDPOINT, playlistID);
 
         JsonObjectRequest jsonObjectRequest = preparePutRequest(payload, Request.Method.POST);
@@ -181,5 +199,74 @@ public class PlaylistService {
                 return headers;
             }
         };
+    }
+
+    public void getSongs(final VolleyCallBack callBack) {
+
+        playlistItemDB = FirebaseDatabase.getInstance().getReference().child(msharedPreferences.getString("username", "") + " " + msharedPreferences.getString("userid", "")).child("Playlist");
+
+        playlistItemDB.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                playlistID = snapshot.child("id").getValue().toString();
+                Log.i(TAG, "SELECTED ID IS: " + playlistID);
+                ENDPOINTPLAYLISTITEM = String.format(ENDPOINTSONGS, playlistID);
+                Log.i(TAG, "ENDPOINT IS: " + ENDPOINTPLAYLISTITEM);
+
+                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, ENDPOINTPLAYLISTITEM, null, new com.android.volley.Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Gson gson = new Gson();
+                        JSONArray jsonArray = response.optJSONArray("items");
+
+                        for (int n = 0; n < jsonArray.length(); n++) {
+                            try {
+                                JSONObject object = jsonArray.getJSONObject(n);
+                                object = object.optJSONObject("track");
+                                Song song = gson.fromJson(object.toString(), Song.class);
+                                song.setArtist(object.optJSONArray("artists").optJSONObject(0).getString("name"));
+                                String playURL = object.getString("uri");
+                                String previewURL = object.getString("preview_url");
+                                song.setPlayURL(playURL);
+                                song.setPreviewURL(previewURL);
+                                try {
+                                    String imgUrl = object.optJSONObject("album").optJSONArray("images").optJSONObject(0).getString("url");
+                                    song.setImageURL(imgUrl);
+                                } catch (NullPointerException e) {
+                                    song.setImageURL("");
+                                }
+
+                                songs.add(song);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+                        callBack.onSuccess();
+                    }
+                }, error -> get(() -> {
+
+                })) {
+                    @Override
+                    public Map<String, String> getHeaders() throws AuthFailureError {
+                        Map<String, String> headers = new HashMap<>();
+                        String token = msharedPreferences.getString("token", "");
+                        String auth = "Bearer " + token;
+                        headers.put("Authorization", auth);
+                        headers.put("Content-Type", "application/json");
+                        return headers;
+                    }
+                };
+                mqueue.add(jsonObjectRequest);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
+
     }
 }

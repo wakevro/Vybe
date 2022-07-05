@@ -2,6 +2,7 @@ package com.example.richard.vybe;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+//import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Window;
@@ -10,11 +11,18 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import com.example.richard.vybe.Model.User;
+import com.example.richard.vybe.SpotifyConnect.UserService;
 import com.example.richard.vybe.Swipe.MainActivity;
 import com.spotify.sdk.android.authentication.AuthenticationClient;
 import com.spotify.sdk.android.authentication.AuthenticationRequest;
 import com.spotify.sdk.android.authentication.AuthenticationResponse;
 
+
+
+/**
+ * Start Activity, authenticate Spotify
+ */
 public class SplashActivity extends AppCompatActivity {
 
     private SharedPreferences.Editor editor;
@@ -40,23 +48,39 @@ public class SplashActivity extends AppCompatActivity {
         authenticateSpotify();
         Log.d(TAG, "FINISHED AUTHENTICATING");
 
+
         msharedPreferences = this.getSharedPreferences("SPOTIFY", 0);
         queue = Volley.newRequestQueue(this);
     }
 
 
+
     private void waitForUserInfo() {
-        startMainActivity();
+        Log.i(TAG, "STARTING TO GET USER INFO.");
+        UserService userService = new UserService(queue, msharedPreferences);
+        Log.i(TAG, "GOTTEN USER SERVICE.");
+        userService.get(() -> {
+            Log.i(TAG, "STARTING TO GET USER.");
+            User user = userService.getUser();
+            Log.i(TAG, "GOTTEN USER.");
+            editor = getSharedPreferences("SPOTIFY", 0).edit();
+            editor.putString("userid", user.id);
+            editor.putString("username", user.display_name);
+            Log.d(TAG, "GOT USER INFORMATION");
+            editor.commit();
+            startMainActivity();
+            finish();
+        });
     }
 
     private void startMainActivity() {
         Intent newintent = new Intent(SplashActivity.this, MainActivity.class);
         startActivity(newintent);
-        finish();
     }
 
 
     private void authenticateSpotify() {
+        Log.d(TAG, "START AUTHENTICATING");
         AuthenticationRequest.Builder builder = new AuthenticationRequest.Builder(CLIENT_ID, AuthenticationResponse.Type.TOKEN, REDIRECT_URI);
         builder.setScopes(new String[]{"user-read-recently-played,user-library-modify,user-library-read,playlist-modify-public,playlist-modify-private,user-read-email,user-read-private,playlist-read-private,playlist-read-collaborative"});
         AuthenticationRequest request = builder.build();
@@ -73,6 +97,10 @@ public class SplashActivity extends AppCompatActivity {
         // Check if result comes from the correct activity
         if (requestCode == REQUEST_CODE) {
             AuthenticationResponse response = AuthenticationClient.getResponse(resultCode, intent);
+            // TODO : Redirect to error page.
+//            if (response.getType().toString() == "empty") {
+//                //;
+//            }
             Log.d(TAG, "FINISHED REQUEST CODE");
             Log.d(TAG, "RESULT TYPE" + response.getType().toString());
 
@@ -83,9 +111,7 @@ public class SplashActivity extends AppCompatActivity {
                     editor.putString("token", response.getAccessToken());
                     Log.d(TAG, "GOT AUTH TOKEN");
                     editor.apply();
-                    Log.i(TAG, "GO TO NEW PAGE");
                     waitForUserInfo();
-                    Log.i(TAG, "Gone");
                     break;
 
                 // Auth flow returned an error
@@ -98,11 +124,10 @@ public class SplashActivity extends AppCompatActivity {
                 default:
                     // Handle other cases
                     Log.d(TAG, "DEFAULT IN SWITCH CASE");
+                    // TODO: OPEN ERROR ACTIVITY.
             }
         }
     }
 
 
 }
-
-

@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.richard.vybe">
 
     <uses-permission android:name="android.permission.INTERNET" />
+
     <queries>
         <package android:name="com.spotify.music" />
     </queries>
@@ -14,14 +16,28 @@
         android:roundIcon="@drawable/ic_vybe"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.example.richard.vybe.SplashActivity">
+        <activity
+            android:name=".Authenticate.AuthenticateActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Home.PlaylistItemsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Swipe.MainActivity"
+            tools:ignore="Instantiatable" />
+        <activity
+            android:name=".Sentiment.SentimentFragment"
+            tools:ignore="Instantiatable" />
+        <activity android:name=".SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.example.richard.vybe.Swipe.MainActivity" />
+        <activity
+            android:name=".Swipe.MainActivity"
+            tools:ignore="DuplicateActivity" />
         <activity
             android:name="com.spotify.sdk.android.authentication.LoginActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />

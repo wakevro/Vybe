@@ -3,10 +3,14 @@ package com.example.richard.vybe.SpotifyConnect;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.richard.vybe.Model.EndPoints;
@@ -15,24 +19,28 @@ import com.google.gson.Gson;
 import com.spotify.android.appremote.api.ConnectionParams;
 import com.spotify.android.appremote.api.Connector;
 import com.spotify.android.appremote.api.SpotifyAppRemote;
+import com.spotify.android.appremote.api.error.CouldNotFindSpotifyApp;
+import com.spotify.protocol.error.SpotifyAppRemoteException;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
 public class SpotifyConnector {
 
-    private String TAG = "SpotifyConnect";
+    private String TAG = "SpotifyConnector";
 
     private HashSet<Song> songs = new HashSet<Song>();
     private SharedPreferences sharedPreferences;
     private RequestQueue queue;
     private static final String CLIENT_ID = "4b2696ee4bdc43b6aeb2c828e76b9374";
     private static final String REDIRECT_URI = "com.example.richard.vybe://callback";
+    private static final String ENDPOINT = EndPoints.RECENTLY_PLAYED.toString();
     public SpotifyAppRemote mSpotifyAppRemote;
     public Context mcontext;
 
@@ -46,9 +54,9 @@ public class SpotifyConnector {
     }
 
 
-    public void addSongToDislikedPlaylist(Song song) {
+    public void addSongToDislikedPlaylist(Song song, String playlistID) {
         PlaylistService playlistService = new PlaylistService(queue, sharedPreferences);
-        playlistService.put(song);
+        playlistService.put(song, playlistID);
     }
 
     public void removeSongFromDislikedPlaylist(Song song) {
@@ -68,9 +76,8 @@ public class SpotifyConnector {
 
 
     public HashSet<Song> getRecentlyPlayedTracks() {
-        String endpoint = EndPoints.RECENTLY_PLAYED.toString();
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                (Request.Method.GET, endpoint, null, response -> {
+                (Request.Method.GET, ENDPOINT, null, response -> {
                     Gson gson = new Gson();
                     JSONArray jsonArray = response.optJSONArray("items");
                     for (int n = 0; n < jsonArray.length(); n++) {
@@ -80,7 +87,9 @@ public class SpotifyConnector {
                             Song song = gson.fromJson(object.toString(), Song.class);
                             song.setArtist(object.optJSONArray("artists").optJSONObject(0).getString("name"));
                             String playURL = object.getString("uri");
+                            String previewURL = object.getString("preview_url");
                             song.setPlayURL(playURL);
+                            song.setPreviewURL(previewURL);
                             try {
                                 String imgUrl = object.optJSONObject("album").optJSONArray("images").optJSONObject(0).getString("url");
                                 song.setImageURL(imgUrl);
@@ -95,7 +104,6 @@ public class SpotifyConnector {
                     }
                 }, error -> {
                     // TODO: Handle error
-
                 }) {
 
 
@@ -125,7 +133,14 @@ public class SpotifyConnector {
 
     public void playSong(Song song) {
         String songToPlay = "spotify:track:" + song.getId();
-//        mSpotifyAppRemote.getPlayerApi().play(songToPlay);
+        try {
+            mSpotifyAppRemote.getPlayerApi().play(songToPlay);
+            Toast.makeText(mcontext.getApplicationContext(), "Playing Song", Toast.LENGTH_SHORT).show();
+        } catch (NullPointerException e) {
+            Toast.makeText(mcontext.getApplicationContext(), "No Spotify App Installed.", Toast.LENGTH_SHORT).show();;
+        }
+
+        Log.i(TAG, "SONG URL: " + song.getId());
     }
 
     private void getSpotifyAppRemote() {
@@ -135,8 +150,6 @@ public class SpotifyConnector {
                         .showAuthView(true)
                         .build();
 
-        // TODO : Comment this out to make spotify run without the app installed
-        // or set mSpotifyAppRemote = null and use if (!null) run else toast wherever mSpotifyAppRemote is used like in "Playing Song"
         SpotifyAppRemote.connect(mcontext, connectionParams,
                 new Connector.ConnectionListener() {
 
@@ -150,6 +163,10 @@ public class SpotifyConnector {
                         // Something went wrong when attempting to connect! Handle errors here
                     }
                 });
+    }
+
+    public void disconnectSpotify() {
+        SpotifyAppRemote.disconnect(mSpotifyAppRemote);
     }
 
 

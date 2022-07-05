@@ -1,6 +1,7 @@
 package com.example.richard.vybe.SpotifyConnect;
 
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.RequestQueue;
@@ -10,10 +11,15 @@ import com.example.richard.vybe.Model.User;
 import com.example.richard.vybe.VolleyCallBack;
 import com.google.gson.Gson;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class UserService {
+
+    private String TAG = "UserService";
 
     private static final String ENDPOINT = EndPoints.USER.toString();
     private SharedPreferences msharedPreferences;
@@ -33,6 +39,21 @@ public class UserService {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(ENDPOINT, null, response -> {
             Gson gson = new Gson();
             user = gson.fromJson(response.toString(), User.class);
+            Log.i(TAG, "USER INFO: " + response.toString());
+            try {
+                user.setId(response.getString("id"));
+                user.setDisplay_name(response.getString("display_name"));
+                user.setEmail(response.getString("email"));
+                user.setCountry(response.getString("country"));
+                user.setEmail("email");
+
+                JSONObject image = response.getJSONArray("images").getJSONObject(0);
+                user.setProfileImageURL(image.getString("url"));
+                Log.i(TAG, "USER NAME: " + user.getDisplay_name());
+                Log.i(TAG, "USER IMAGE: " + user.getProfileImageURL());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
             callBack.onSuccess();
         }, error -> get(() -> {

@@ -1,35 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="horizontal"
-    android:padding="20sp">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
     <ImageView
-        android:layout_width="100sp"
-        android:layout_height="100sp"
-        app:srcCompat="@mipmap/ic_launcher"
-        android:id="@+id/img"/>
-    <LinearLayout
-        android:paddingLeft="20sp"
-        android:layout_width="match_parent"
+        android:id="@+id/ivPlaylistImage"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/tvPlaylistName"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_gravity="center">
-        <TextView
-            android:paddingBottom="20sp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text=""
-            android:id="@+id/id"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text=""
-            android:layout_gravity="center"
-            android:id="@+id/title"/>
-    </LinearLayout>
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="10dp"
+        android:maxEms="15"
+        android:maxLines="5"
+        android:text="PlaylistName"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/ivPlaylistImage"
+        app:layout_constraintTop_toTopOf="@+id/ivPlaylistImage" />
 
-
-</LinearLayout>
+    <TextView
+        android:id="@+id/tvPlaylistSongSize"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:text="Song Size"
+        app:layout_constraintStart_toStartOf="@+id/tvPlaylistName"
+        app:layout_constraintTop_toBottomOf="@+id/tvPlaylistName" />
+</androidx.constraintlayout.widget.ConstraintLayout>

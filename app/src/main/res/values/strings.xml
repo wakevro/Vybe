@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Vybe</string>
     <string name="vybe">Vybe</string>
+    <string name="how_are_you_feeling">How are you feeling?</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

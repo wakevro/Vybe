@@ -7,6 +7,7 @@ public class Song {
     private String artist;
     private String imageURL;
     private String playURL;
+    private String previewURL;
     private Boolean liked;
     private Long timestamp;
     private Playlist playlist;
@@ -76,6 +77,10 @@ public class Song {
     public String getPlayURL() { return playURL; }
 
     public void setPlayURL(String playURL) {this.playURL = playURL; }
+
+    public String getPreviewURL() { return previewURL; }
+
+    public void setPreviewURL(String previewURL) {this.previewURL = previewURL; }
 
     public Boolean getLiked() {
         return liked;

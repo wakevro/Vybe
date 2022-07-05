@@ -4,6 +4,7 @@ public class Playlist {
     private String id;
     private String imageURL;
     private String name;
+    private int totalTracks;
 
 
     public Playlist(String id, String name){
@@ -34,5 +35,13 @@ public class Playlist {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getTotalTracks() {
+        return totalTracks;
+    }
+
+    public void setTotalTracks(int totalTracks) {
+        this.totalTracks = totalTracks;
     }
 }

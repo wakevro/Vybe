@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#ea8b2c</color>
+    <color name="colorPrimary">#141414</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="red"> #CC3333 </color>
     <color name="green"> #138E5A </color>
+    <color name="transparent_red">#E9D64D4D</color>
+    <color name="transparent_green">#E94DE8A6</color>
     <color name="vybe_orange_light">#FFCC99</color>
 </resources>

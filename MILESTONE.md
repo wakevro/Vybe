@@ -41,25 +41,25 @@ This is a spotify playlist generator app that generates music based on user's mo
 
 ## WEEK 3
 - Allow easy navigation with bottom navigation.
-- Wrap up every connection with Spotify like creating new playlist, etc.
+- Add creating new playlist functionality.
 - Create an activity for User to describe current mood.
 - Get User's input and work on the sentiment analysis.
-- Get started with implementing maps.
-- Make research on efficient algorithms to analyze each song coming from the API.
-
-## WEEK 4
+- Make research on efficient algorithms to analyze each song coming from the API.- Connect the analysis with User inputted mood.
 - Finalize research on algorithm for analyzing each song.
 - Work with the derived algorithm and analyze each song.
 - Filter songs to display to the User based on analyzed songs.
+- Populate screen with only songs matching User's current mood.
+
+## WEEK 4
+- Add basic chat functionality with multiple Users.
+- Get started with implementing maps.
 - Allow maps to show markers of users.
 - Allow users to search for specific locations on the map.
 - On zoom in/out show less users or more users
-- Finalize map functionality.
+- Wrap up every connection with Spotify like creating new playlist, etc.
 
 ## WEEK 5
-- Add basic chat functionality with multiple Users.
-- Connect the analysis with User inputted mood.
-- Populate screen with only songs matching User's current mood.
+- Finalize map functionality.
 - Wrap up MVP functionality.
 - Improve on features that need improvement.
 
