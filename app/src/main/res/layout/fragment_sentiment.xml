@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Sentiment.SentimentFragment">
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            android:src="@drawable/black_man_sitting_on_stool"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <EditText
+                android:id="@+id/etUserMood"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="208dp"
+                android:layout_marginEnd="40dp"
+                android:background="@drawable/text_input"
+                android:ems="15"
+                android:hint="@string/how_are_you_feeling"
+                android:inputType="textPersonName"
+                android:maxLines="3"
+                android:minHeight="48dp"
+                android:padding="20dp"
+                android:textColor="@android:color/black"
+
+
+                android:textColorHint="#4E4C4C"
+
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/btnMood"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="28dp"
+                android:text="GO"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@id/etUserMood"
+                app:layout_constraintHorizontal_bias="0.948"
+                app:layout_constraintStart_toStartOf="@id/etUserMood"
+                app:layout_constraintTop_toBottomOf="@+id/etUserMood" />
+
+
+            <!--            <pl.droidsonroids.gif.GifImageView-->
+<!--                android:id="@+id/ivMood"-->
+<!--                android:layout_width="60dp"-->
+<!--                android:layout_height="60dp"-->
+<!--                android:layout_marginTop="248dp"-->
+<!--                android:background="@drawable/rocket"-->
+<!--                app:layout_constraintEnd_toEndOf="@id/etUserMood"-->
+<!--                app:layout_constraintHorizontal_bias="0.498"-->
+
+<!--                app:layout_constraintStart_toStartOf="@id/etUserMood"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/etUserMood"/>-->
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+    </FrameLayout>
+
+
+    <!--    <ImageView-->
+<!--        android:id="@+id/ivMood"-->
+<!--        android:layout_width="50dp"-->
+<!--        android:layout_height="50dp"-->
+<!--        android:layout_marginTop="76dp"-->
+<!--        android:background="@drawable/rocket"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/etUserMood" />-->
+
+</androidx.constraintlayout.widget.ConstraintLayout>

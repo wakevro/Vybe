@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/miHome"
+        android:icon="@drawable/home_outline"
+        android:title="Home"
+        app:showAsAction="always" />
+<!--    <item-->
+<!--        android:id="@+id/miLocation"-->
+<!--        android:icon="@drawable/location_outline"-->
+<!--        android:title="Location"-->
+<!--        app:showAsAction="always" />-->
+    <item
+        android:id="@+id/miAddMood"
+        android:icon="@drawable/new_mood_outline"
+        android:title="Mood"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/miSwipe"
+        android:icon="@drawable/musical_note_outline"
+        android:title="Swipe"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/miProfile"
+        android:icon="@drawable/profile_outline"
+        android:title="Profile"
+        app:showAsAction="always" />
+</menu>
