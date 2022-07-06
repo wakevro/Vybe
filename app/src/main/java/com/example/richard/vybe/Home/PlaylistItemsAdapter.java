@@ -62,7 +62,6 @@ public class PlaylistItemsAdapter extends RecyclerView.Adapter<PlaylistItemsAdap
             String songToPlay = song.getPlayURL();
             try {
                 spotifyConnector.mSpotifyAppRemote.getPlayerApi().play(songToPlay);
-//                Toast.makeText(context, "Playing Song", Toast.LENGTH_SHORT).show();
             } catch (NullPointerException e) {
                 Toast.makeText(context, "No Spotify App Installed.", Toast.LENGTH_SHORT).show();;
             }
@@ -95,11 +94,9 @@ public class PlaylistItemsAdapter extends RecyclerView.Adapter<PlaylistItemsAdap
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-//        holder.title.setText(mDataset.get(position).getName());
         holder.tvSongName.setText(mSongs.get(position).getName());
         holder.tvSongArtist.setText(mSongs.get(position).getArtist());
         holder.song = mSongs.get(position);
-//        holder.playlist = mDataset.get(position);
         if (mSongs.get(position).getImageURL() != null) {
             Glide.with(mContext)
                     .load(mSongs.get(position).getImageURL())

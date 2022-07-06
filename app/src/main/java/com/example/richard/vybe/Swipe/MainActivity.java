@@ -66,6 +66,16 @@ public class MainActivity extends FragmentActivity {
 
                     return true;
                 }
+                if (item.getItemId()==R.id.miAddMood){
+                    viewPager2.setCurrentItem(1);
+
+                    return true;
+                }
+                if (item.getItemId()==R.id.miSwipe){
+                    viewPager2.setCurrentItem(2);
+                    return true;
+                }
+
                 return true;
             }
         });
@@ -145,11 +155,9 @@ public class MainActivity extends FragmentActivity {
                     view.setTranslationX(-horzMargin + vertMargin / 2);
                 }
 
-                // scale the page down
                 view.setScaleX(scaleFactor);
                 view.setScaleY(scaleFactor);
 
-                //fade the page relative to its size
                 view.setAlpha(MIN_ALPHA + (scaleFactor - MIN_SCALE)/ (1 - MIN_SCALE) * (1 - MIN_ALPHA));
 
             }   else {
