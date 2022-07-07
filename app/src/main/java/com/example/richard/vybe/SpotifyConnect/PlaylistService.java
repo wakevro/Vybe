@@ -120,7 +120,6 @@ public class PlaylistService {
     public void put(Song song, String playlistID) {
         JSONObject payload = preparePayload(song);
 
-//        playlistID = msharedPreferences.getString("playlist", "");
         URL = String.format(ENDPOINT, playlistID);
 
         JsonObjectRequest jsonObjectRequest = preparePutRequest(payload, Request.Method.POST);

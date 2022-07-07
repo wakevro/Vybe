@@ -94,18 +94,12 @@ public class SplashActivity extends AppCompatActivity {
 
         Log.d(TAG, "START ACTIVITY RESULT");
         Log.d(TAG, "RESULT CODE: " + resultCode);
-        // Check if result comes from the correct activity
         if (requestCode == REQUEST_CODE) {
             AuthenticationResponse response = AuthenticationClient.getResponse(resultCode, intent);
-            // TODO : Redirect to error page.
-//            if (response.getType().toString() == "empty") {
-//                //;
-//            }
             Log.d(TAG, "FINISHED REQUEST CODE");
             Log.d(TAG, "RESULT TYPE" + response.getType().toString());
 
             switch (response.getType()) {
-                // Response was successful and contains auth token
                 case TOKEN:
                     editor = getSharedPreferences("SPOTIFY", 0).edit();
                     editor.putString("token", response.getAccessToken());

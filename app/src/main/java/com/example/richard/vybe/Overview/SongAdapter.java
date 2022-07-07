@@ -2,21 +2,19 @@ package com.example.richard.vybe.Overview;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-//import android.support.v7.widget.RecyclerView;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
-import com.example.richard.vybe.R;
 import com.example.richard.vybe.Model.Song;
+import com.example.richard.vybe.R;
 import com.example.richard.vybe.SpotifyConnect.SpotifyConnector;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -72,25 +70,16 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.MyViewHolder> 
         public void onClick(View view) {
             if (song.getLiked()) {
                 databaseReference.child(song.getId()).child("liked").setValue(false);
-//                spotifyConnector.addSongToDislikedPlaylist(song);
                 spotifyConnector.removeSongFromLibrary(song);
                 databaseReference.child(song.getId()).child("playlist").child("id").setValue(sharedPreferences.getString("playlist", null));
                 databaseReference.child(song.getId()).child("playlist").child("name").setValue(sharedPreferences.getString("playlistname", null));
                 song.setLiked(false);
-                //song.setPlaylist(new Playlist(sharedPreferences.getString("playlist", ""), sharedPreferences.getString("playlistname", "")));
                 view.setBackgroundColor(context.getResources().getColor(R.color.transparent_red));
-                //TextView playlist = view.findViewById(R.id.playlist);
-                //playlist.setText(sharedPreferences.getString("playlistname", ""));
             } else {
                 databaseReference.child(song.getId()).child("liked").setValue(true);
-                //databaseReference.child(song.getId()).child("playlist").removeValue();
                 spotifyConnector.saveSongToLibrary(song);
-//                spotifyConnector.removeSongFromDislikedPlaylist(song);
                 song.setLiked(true);
                 view.setBackgroundColor(context.getResources().getColor(R.color.transparent_green));
-//                TextView playlist = view.findViewById(R.id.playlist);
-                //playlist.setText("");
-
             }
         }
     }
@@ -123,7 +112,6 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.MyViewHolder> 
 
         } else {
             holder.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.transparent_red));
-//            holder.tvOverviewSongArtist.setText("mDataset.get(position).getPlaylist().getName()");
         }
         Glide.with(mContext)
                 .load(mDataset.get(position).getImageURL())

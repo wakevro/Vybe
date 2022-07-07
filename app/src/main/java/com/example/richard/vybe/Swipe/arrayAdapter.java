@@ -44,6 +44,8 @@ public class arrayAdapter extends ArrayAdapter<Song> {
                 .load(card_item.getImageURL())
                 .into(image);
 
+        cardView.setRadius(50);
+
         return convertView;
 
     }

@@ -78,7 +78,6 @@ public class OverviewFragment extends Fragment {
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
 
-//        getSwipedTracks();
         mAdapter = new SongAdapter(songs, getContext());
         recyclerView.setAdapter(mAdapter);
 
@@ -131,15 +130,12 @@ public class OverviewFragment extends Fragment {
         // TODO : After creating playlist, delete tracks, copy deletetracks function from SwipeFragment
         Log.i(TAG, "FINISHED CREATING PLAYLIST");
 
-        // Switch to HomeFragment
-
         deleteTracks();
         Intent intent = new Intent(getContext(), MainActivity.class);
         intent.putExtra("page_number", 0);
         startActivityForResult(intent, 0);
 
     }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -152,10 +148,8 @@ public class OverviewFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-//        Toast.makeText(getContext(), "Overview!", Toast.LENGTH_SHORT).show();
         songs.clear();
         getSwipedTracks();
-//        mAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -164,9 +158,7 @@ public class OverviewFragment extends Fragment {
 
         if (getView() != null) {
             if (isVisibleToUser) {
-
                 songs.clear();
-//                mAdapter.notifyDataSetChanged();
                 getSwipedTracks();
             } else {
             }
@@ -181,7 +173,6 @@ public class OverviewFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                     collectTracks((Map<String, Object>) dataSnapshot.getValue());
-//                    mAdapter.notifyDataSetChanged();
                 }
             }
 
@@ -300,7 +291,6 @@ public class OverviewFragment extends Fragment {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
-//                    Toast.makeText(getActivity(), "Successfully deleted!", Toast.LENGTH_SHORT).show();
                 }
                 else {
                     Toast.makeText(getActivity(), "Failed to delete!", Toast.LENGTH_SHORT).show();
