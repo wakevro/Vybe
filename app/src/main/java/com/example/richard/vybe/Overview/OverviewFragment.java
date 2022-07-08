@@ -216,6 +216,7 @@ public class OverviewFragment extends Fragment {
     }
 
     public void createPlaylist(String userID, String playlistName){
+        Log.i(TAG, "USER ID: " + userID);
         JSONObject jsonBodyObj = new JSONObject();
         try{
             jsonBodyObj.put("name", playlistName);

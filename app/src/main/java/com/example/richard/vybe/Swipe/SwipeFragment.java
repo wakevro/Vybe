@@ -420,4 +420,5 @@ public class SwipeFragment extends Fragment {
         Log.i(TAG, "Total Items: " + progressMax);
     }
 
+
 }
