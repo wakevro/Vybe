@@ -81,7 +81,6 @@ public class PlaylistService {
                 for (int n = 0; n < jsonArray.length(); n++) {
                     try {
                         JSONObject jsonObject = jsonArray.getJSONObject(n);
-                        Log.i(TAG, "PLAYLIST: " + jsonObject.toString());
                         Playlist playlist = gson.fromJson(jsonObject.toString(), Playlist.class);
                         try {
                             playlist.setImageURL(jsonObject.optJSONArray("images").optJSONObject(0).getString("url"));
@@ -89,7 +88,6 @@ public class PlaylistService {
                             playlist.setImageURL(null);
                         }
                         playlist.setTotalTracks(jsonObject.getJSONObject("tracks").getInt("total"));
-                        Log.i(TAG, "PLAYLIST TOTAL: " + playlist.getTotalTracks());
 
                         playlists.add(playlist);
                     } catch (JSONException e) {
@@ -208,9 +206,7 @@ public class PlaylistService {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 playlistID = snapshot.child("id").getValue().toString();
-                Log.i(TAG, "SELECTED ID IS: " + playlistID);
                 ENDPOINTPLAYLISTITEM = String.format(ENDPOINTSONGS, playlistID);
-                Log.i(TAG, "ENDPOINT IS: " + ENDPOINTPLAYLISTITEM);
 
                 JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, ENDPOINTPLAYLISTITEM, null, new com.android.volley.Response.Listener<JSONObject>() {
                     @Override

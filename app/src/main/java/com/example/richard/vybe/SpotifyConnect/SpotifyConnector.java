@@ -8,9 +8,6 @@ import android.widget.Toast;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.richard.vybe.Model.EndPoints;
@@ -19,14 +16,11 @@ import com.google.gson.Gson;
 import com.spotify.android.appremote.api.ConnectionParams;
 import com.spotify.android.appremote.api.Connector;
 import com.spotify.android.appremote.api.SpotifyAppRemote;
-import com.spotify.android.appremote.api.error.CouldNotFindSpotifyApp;
-import com.spotify.protocol.error.SpotifyAppRemoteException;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -135,12 +129,10 @@ public class SpotifyConnector {
         String songToPlay = "spotify:track:" + song.getId();
         try {
             mSpotifyAppRemote.getPlayerApi().play(songToPlay);
-            Toast.makeText(mcontext.getApplicationContext(), "Playing Song", Toast.LENGTH_SHORT).show();
         } catch (NullPointerException e) {
             Toast.makeText(mcontext.getApplicationContext(), "No Spotify App Installed.", Toast.LENGTH_SHORT).show();;
         }
 
-        Log.i(TAG, "SONG URL: " + song.getId());
     }
 
     private void getSpotifyAppRemote() {
@@ -155,7 +147,6 @@ public class SpotifyConnector {
 
                     public void onConnected(SpotifyAppRemote spotifyAppRemote) {
                         mSpotifyAppRemote = spotifyAppRemote;
-                        Log.d(TAG, "Connected! Yay!");
                     }
 
                     public void onFailure(Throwable throwable) {

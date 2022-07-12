@@ -2,7 +2,6 @@ package com.example.richard.vybe.Home;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,11 +65,6 @@ public class PlaylistItemsAdapter extends RecyclerView.Adapter<PlaylistItemsAdap
                 Toast.makeText(context, "No Spotify App Installed.", Toast.LENGTH_SHORT).show();;
             }
 
-            Log.i(TAG, "SONG URL: " + song.getId());
-
-
-
-
         }
 
 
@@ -97,6 +91,7 @@ public class PlaylistItemsAdapter extends RecyclerView.Adapter<PlaylistItemsAdap
         holder.tvSongName.setText(mSongs.get(position).getName());
         holder.tvSongArtist.setText(mSongs.get(position).getArtist());
         holder.song = mSongs.get(position);
+
         if (mSongs.get(position).getImageURL() != null) {
             Glide.with(mContext)
                     .load(mSongs.get(position).getImageURL())

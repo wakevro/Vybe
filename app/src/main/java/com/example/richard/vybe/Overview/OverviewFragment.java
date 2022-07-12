@@ -98,7 +98,6 @@ public class OverviewFragment extends Fragment {
                     public void onClick(View view) {
                         EditText etPlaylist = bottomSheetView.findViewById(R.id.etPlaylistName);
                         String userPlaylistName = etPlaylist.getText().toString();
-                        Toast.makeText(getContext(), "PLAYLIST NAME IS: " + userPlaylistName, Toast.LENGTH_SHORT).show();
                         if (userPlaylistName.isEmpty()) {
                             userPlaylistName = "Vybe";
                         }
@@ -127,8 +126,8 @@ public class OverviewFragment extends Fragment {
         userID = userID.replaceFirst("https://vybe-6c7cb-default-rtdb.firebaseio.com/", "");
         createPlaylist(userID, playlistName);
 
-        // TODO : After creating playlist, delete tracks, copy deletetracks function from SwipeFragment
-        Log.i(TAG, "FINISHED CREATING PLAYLIST");
+
+        // Switch to HomeFragment
 
         deleteTracks();
         Intent intent = new Intent(getContext(), MainActivity.class);
@@ -136,6 +135,7 @@ public class OverviewFragment extends Fragment {
         startActivityForResult(intent, 0);
 
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -158,6 +158,7 @@ public class OverviewFragment extends Fragment {
 
         if (getView() != null) {
             if (isVisibleToUser) {
+
                 songs.clear();
                 getSwipedTracks();
             } else {
@@ -185,38 +186,26 @@ public class OverviewFragment extends Fragment {
 
 
     private void collectTracks(Map<String, Object> tracks) {
-        Log.i(TAG, "START COLLECT TRACKS");
         for (Map.Entry<String, Object> entry : tracks.entrySet()) {
-            Log.i(TAG, "PASSED FIRST HERE");
             Map value = (Map) entry.getValue();
-            Log.i(TAG, "SONG DICTIONARY:" + value.toString());
-
             Song song = new Song(entry.getKey(), value.get("name").toString());
             song.setLiked((Boolean) value.get("liked"));
             song.setImageURL(value.get("img").toString());
             song.setTimestamp((Long) value.get("time"));
             song.setArtist((String) value.get("artist"));
-            Log.i(TAG, "SONG Artist: " + song.getArtist());
-            Log.i(TAG, "PASSED SECOND HERE");
             if (!song.getLiked()) {
                 Object object = (HashMap) value.get("playlist");
-                Log.i(TAG, "PASSED THIRD HERE");
                 song.setPlaylist(new Playlist(song.getId(), song.getName()));
-                Log.i(TAG, "PASSED FOURTH HERE");
             }
-            Log.i(TAG, "ADD SONG");
             songs.add(song);
 
-            Log.i(TAG, "START COLLECTIONS");
             Collections.sort(songs, (o1, o2) -> (int) (o2.getTimestamp() - o1.getTimestamp()));
 
             mAdapter.notifyDataSetChanged();
         }
-        Log.i(TAG, "END COLLECT TRACKS");
     }
 
     public void createPlaylist(String userID, String playlistName){
-        Log.i(TAG, "USER ID: " + userID);
         JSONObject jsonBodyObj = new JSONObject();
         try{
             jsonBodyObj.put("name", playlistName);
@@ -236,16 +225,12 @@ public class OverviewFragment extends Fragment {
                         try {
 
                             playlistID = response.getString("id");
-                            Log.i(TAG, "PLAYLIST ID : " + playlistID);
-                            Log.i(TAG, "GETTING SONG TO ADD");
                             songs.forEach((song) -> {
                                 if (song.getLiked()) {
                                     Log.i(TAG, "ADDED SONG");
                                     spotifyConnector.addSongToDislikedPlaylist(song, playlistID);
                                 }
                             });
-                            Log.i(TAG, "PRINT RESPONSE");
-                            Log.i(TAG, response.toString(4));
 
                         } catch (JSONException e) {
                             Log.e(TAG, "Error whilst parsing JSONObject");

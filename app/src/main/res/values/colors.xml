@@ -8,4 +8,7 @@
     <color name="transparent_red">#E9D64D4D</color>
     <color name="transparent_green">#E94DE8A6</color>
     <color name="vybe_orange_light">#FFCC99</color>
+    <color name="white">#F1F3F6</color>
+    <color name="theme_color">#2176FF</color>
+    <color name="theme_color_8">#142176FF</color>
 </resources>

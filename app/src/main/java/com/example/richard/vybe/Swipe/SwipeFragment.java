@@ -72,7 +72,6 @@ public class SwipeFragment extends Fragment {
 
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.i(TAG, "SWIPE FRAGMENT STARTED");
         rootView = inflater.inflate(R.layout.fragment_swipe, container, false);
 
         sharedPreferences = getActivity().getSharedPreferences("SPOTIFY", 0);
@@ -90,7 +89,6 @@ public class SwipeFragment extends Fragment {
 
         spotifyConnector = new SpotifyConnector(getContext());
 
-        Log.i(TAG, "GOT SONG DB");
 
         rowItems = new ArrayList<>();
         setUpSwipeCards();
@@ -110,17 +108,13 @@ public class SwipeFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        Log.i(TAG, "On start getting tracks...");
         getTracks();
-        Log.i(TAG, "On start gotten tracks...");
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        Log.i(TAG, "On resume getting tracks...");
         getTracks();
-        Log.i(TAG, "On resume gotten tracks...");
     }
 
     @Override
@@ -140,29 +134,24 @@ public class SwipeFragment extends Fragment {
 
 
     private void setUpSwipeCards() {
-        Log.i(TAG, "START SWIPE CARDS SETUP");
         SwipeFlingAdapterView flingAdapterView = (SwipeFlingAdapterView) rootView.findViewById(R.id.frame);
         arrayAdapter = new arrayAdapter(getContext(), R.layout.item, rowItems);
         flingAdapterView.setAdapter(arrayAdapter);
         flingAdapterView.setFlingListener(flingListener);
         flingAdapterView.setOnItemClickListener(clickListener);
-        Log.i(TAG, "END SWIPE CARD SETUP");
 
     }
 
 
     private void getTracks() {
-        Log.i(TAG, "FIRST GOT HERE");
         HashSet<Song> recentlyPlayedTracks = spotifyConnector.getRecentlyPlayedTracks();
 
 
-        Log.i(TAG, "GETTING DERIVED SENTIMENT");
         sentimentDB.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     derivedSentiment = Double.parseDouble(snapshot.getValue().toString());
-                    Log.i(TAG, "DERIVED SENTIMENT: " + derivedSentiment);
                 }
 
             }
@@ -370,7 +359,6 @@ public class SwipeFragment extends Fragment {
 
         startedPlaying = true;
         if (mediaPlayer!=null){
-            Log.i(TAG, "Media Player is not null");
             mediaPlayer.stop();
             mediaPlayer.release();
         }
@@ -390,7 +378,6 @@ public class SwipeFragment extends Fragment {
             e.printStackTrace();
         }
 
-        Log.i(TAG, "media player...");
         mediaPlayer.start();
     }
 
@@ -416,8 +403,6 @@ public class SwipeFragment extends Fragment {
             progressBar.setMax(progressMax);
         }
 
-        Log.i(TAG, "Item: " + currentProgress);
-        Log.i(TAG, "Total Items: " + progressMax);
     }
 
 

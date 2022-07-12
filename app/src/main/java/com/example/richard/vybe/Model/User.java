@@ -8,7 +8,8 @@ public class User {
     public String email;
     public String id;
     public String profileImageURL;
-
+    public String status;
+    public String search;
 
     public String getBirthdate() {
         return birthdate;
@@ -56,5 +57,21 @@ public class User {
 
     public void setProfileImageURL(String profileImageURL) {
         this.profileImageURL = profileImageURL;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getSearch() {
+        return search;
+    }
+
+    public void setSearch(String search) {
+        this.search = search;
     }
 }

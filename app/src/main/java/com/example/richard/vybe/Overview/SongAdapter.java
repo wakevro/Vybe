@@ -90,7 +90,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.MyViewHolder> 
     }
 
     @Override
-    public SongAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent,
+    public MyViewHolder onCreateViewHolder(ViewGroup parent,
                                                        int viewType) {
         View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.track, null, false);
         RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -102,7 +102,6 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.MyViewHolder> 
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        Log.i(TAG, "Artist name: " + mDataset.get(position).getArtist());
         holder.tvOverviewSongName.setText(mDataset.get(position).getName());
         holder.tvOverviewSongArtist.setText(mDataset.get(position).getArtist());
         holder.song = mDataset.get(position);

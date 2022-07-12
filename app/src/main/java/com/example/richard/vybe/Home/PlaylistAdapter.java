@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -46,7 +45,6 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.MyView
             sharedPreferences = context.getSharedPreferences("SPOTIFY", 0);
             databaseReference = FirebaseDatabase.getInstance().getReference().child(sharedPreferences.getString("username", "") + " " + sharedPreferences.getString("userid", ""));
 
-
             itemView.setOnClickListener(this);
 
             tvPlaylistName = itemView.findViewById(R.id.tvPlaylistName);
@@ -56,8 +54,6 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.MyView
 
         @Override
         public void onClick(View view) {
-            Toast.makeText(context, "Playlist " + playlist.getName() + " selected", Toast.LENGTH_SHORT).show();
-
             databaseReference.child("Playlist").child("id").setValue(playlist.getId());
             databaseReference.child("Playlist").child("name").setValue(playlist.getName());
             databaseReference.child("Playlist").child("tracks").setValue(playlist.getTotalTracks());
@@ -72,7 +68,6 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.MyView
             );
 
         }
-
 
     }
 
@@ -95,7 +90,6 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.MyView
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
-        Log.i(TAG, "PLAYLIST DICTIONARY: "+ mDataset.get(position));
         holder.tvPlaylistName.setText(mDataset.get(position).getName());
         holder.playlist = mDataset.get(position);
         holder.tvPlaylistSongSize.setText(Integer.toString(holder.playlist.getTotalTracks()) + " songs");

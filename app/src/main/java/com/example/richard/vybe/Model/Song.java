@@ -26,7 +26,11 @@ public class Song {
         if(object == null || object.getClass()!= this.getClass())
             return false;
 
+        // type casting of the argument.
         Song song= (Song) object;
+
+        // comparing the state of argument with
+        // the state of 'this' Object.
         return (song.id.equals(this.id));
     }
 

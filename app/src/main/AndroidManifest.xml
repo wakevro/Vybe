@@ -17,6 +17,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".Message.MessageActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Profile.ProfileActivity"
+            android:exported="false" />
+        <activity
             android:name=".Authenticate.AuthenticateActivity"
             android:exported="false" />
         <activity

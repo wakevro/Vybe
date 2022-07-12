@@ -1,5 +1,6 @@
 package com.example.richard.vybe.Sentiment;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -69,11 +70,17 @@ public class SentimentFragment extends Fragment {
         btnMood.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.i(TAG, "START GO CLICK CHANGE.");
+
+
                 String sentence = etUserMood.getText().toString();
                 String regex = "[0-9]+";
                 String splChrs = "-/@#$%^&_+=()";
                 if (!sentence.isEmpty() && !sentence.startsWith(" ")) {
+                    ProgressDialog progressDialog = new ProgressDialog(getContext());
+                    progressDialog.setCancelable(false);
+                    progressDialog.setMessage("Loading...");
+                    progressDialog.show();
+
                     String URL = "https://vybe-0.uc.r.appspot.com/sentiment/" + sentence;
 
                     JsonObjectRequest objectRequest = new JsonObjectRequest(
@@ -83,21 +90,17 @@ public class SentimentFragment extends Fragment {
                             new Response.Listener<JSONObject>() {
                                 @Override
                                 public void onResponse(JSONObject response) {
-                                    Log.i(TAG, "Response: " + response.toString());
                                     try {
                                         double sentiment = response.getDouble("sentiment");
 
-                                        Log.i(TAG, "CONVERTING...");
                                         sentiment = convertToNewRange(sentiment);
-                                        Log.i(TAG, "Converted sentiment: " + sentiment);
                                         sentimentDB.child("sentiment").setValue(sentiment);
                                         etUserMood.setText("");
-
-
                                         deleteTracks();
-                                        Log.i(TAG, "START ACTIVITY");
+                                        progressDialog.dismiss();
                                         Intent intent = new Intent(getActivity().getBaseContext(), MainActivity.class);
                                         intent.putExtra("page_number", 2);  //2 or whatever you want
+//                                        intent.putExtra("sentiment", sentiment);
                                         getActivity().startActivityForResult(intent, 0);
                                     } catch (JSONException e) {
                                         e.printStackTrace();

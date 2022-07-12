@@ -39,7 +39,6 @@ public class UserService {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(ENDPOINT, null, response -> {
             Gson gson = new Gson();
             user = gson.fromJson(response.toString(), User.class);
-            Log.i(TAG, "USER INFO: " + response.toString());
             try {
                 user.setId(response.getString("id"));
                 user.setDisplay_name(response.getString("display_name"));
@@ -49,8 +48,6 @@ public class UserService {
 
                 JSONObject image = response.getJSONArray("images").getJSONObject(0);
                 user.setProfileImageURL(image.getString("url"));
-                Log.i(TAG, "USER NAME: " + user.getDisplay_name());
-                Log.i(TAG, "USER IMAGE: " + user.getProfileImageURL());
             } catch (JSONException e) {
                 e.printStackTrace();
             }
