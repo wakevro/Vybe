@@ -3,12 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="8dp"
     tools:context=".Fragments.ProfileFragment">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="15dp"
+        android:elevation="10dp"
+        app:cardBackgroundColor="#5F6061">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -19,7 +23,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Profile"
-                android:textColor="@color/colorPrimaryDark"
+                android:textColor="@color/white"
                 android:textStyle="bold" />
 
             <ImageView
@@ -37,7 +41,7 @@
                 android:layout_below="@id/profile_image"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="15dp"
-                android:textColor="@color/colorPrimaryDark"
+                android:textColor="@color/white"
                 android:textStyle="bold"
                 android:id="@+id/username"
                 android:textSize="18sp"

@@ -3,6 +3,7 @@ package com.example.richard.vybe.Adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.example.richard.vybe.Fragments.ChatsFragment;
+import com.example.richard.vybe.Fragments.ProfileFragment;
+import com.example.richard.vybe.Fragments.UsersFragment;
 import com.example.richard.vybe.Message.MessageActivity;
 import com.example.richard.vybe.Model.Chat;
 import com.example.richard.vybe.Model.User;
@@ -60,7 +64,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         holder.username.setText(user.getDisplay_name());
         String userProfileImageURL = user.getProfileImageURL();
 
-
         if (userProfileImageURL.equals("")) {
             Glide.with(mContext)
                     .load(R.drawable.man)
@@ -81,7 +84,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             holder.tvLastMessage.setVisibility(View.GONE);
         }
 
-        Log.i(TAG, "USER: " + user.getStatus());
         if (ischat) {
             if (user.getStatus().equals("online")) {
                 holder.img_on.setVisibility(View.VISIBLE);
@@ -95,10 +97,38 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             holder.img_off.setVisibility(View.GONE);
         }
 
+
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Chats");
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                int unread = 0;
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Chat chat = snapshot.getValue(Chat.class);
+                    if (chat.getReceiver().equals(currentUser) && !chat.isIsseen() && chat.getSender().equals(userFullId)) {
+                        unread ++;
+                    }
+                }
+
+                if (unread == 0) {
+                    holder.tvUnreadCount.setVisibility(View.GONE);
+                } else{
+                    holder.tvUnreadCount.setVisibility(View.VISIBLE);
+                    holder.tvUnreadCount.setText(Integer.toString(unread));
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(mContext, MessageActivity.class);
+
                 intent.putExtra("userFullId", user.getDisplay_name() + " " + user.getId());
                 mContext.startActivity(intent);
             }
@@ -114,6 +144,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView username;
+        private TextView tvUnreadCount;
         public ImageView profile_image;
         private ImageView img_on;
         private ImageView img_off;
@@ -127,6 +158,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             img_on = itemView.findViewById(R.id.img_on);
             img_off = itemView.findViewById(R.id.img_off);
             tvLastMessage = itemView.findViewById(R.id.last_msg);
+            tvUnreadCount = itemView.findViewById(R.id.tvUnreadCount);
         }
     }
 
@@ -156,11 +188,31 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
                         break;
 
                     default:
+                        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Chats");
+                        reference.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                int unread = 0;
+                                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                    Chat chat = snapshot.getValue(Chat.class);
+                                    if (chat.getReceiver().equals(currentUser) && !chat.isIsseen() && chat.getSender().equals(userid)) {
+                                        unread ++;
+                                        last_msg.setTextColor(Color.parseColor("#FF4486E9"));
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
                         last_msg.setText(theLastMessage);
 
                 }
-
+                last_msg.setTextColor(Color.parseColor("#FF969798"));
                 theLastMessage = "default";
+                return;
             }
 
             @Override

@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rlUser"
     android:layout_width="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:padding="10dp"
+    android:background="?selectableItemBackground"
+    android:paddingTop="5dp"
+    android:paddingStart="5dp"
+    android:paddingEnd="5dp"
     android:layout_height="wrap_content">
 
     <ImageView
@@ -17,9 +21,12 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginLeft="10dp"
+        android:layout_alignParentTop="true"
         android:layout_toEndOf="@id/profile_image"
         android:layout_toRightOf="@id/profile_image"
         android:text="username"
+        android:textStyle="bold"
+        android:textColor="@color/colorPrimary"
         android:textSize="18sp" />
 
     <ImageView
@@ -47,15 +54,36 @@
         android:layout_toEndOf="@id/profile_image"/>
 
     <TextView
+        android:id="@+id/last_msg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/username"
+        android:layout_marginLeft="10dp"
         android:layout_toRightOf="@id/profile_image"
-        android:layout_marginTop="5dp"
+        android:maxLines="1"
         android:paddingTop="5dp"
-        android:id="@+id/last_msg"
-        android:textColor="@color/colorPrimaryDark"
-        android:layout_marginLeft="20dp"
-        android:maxLines="1"/>
+        tools:text="This is the last message" />
+
+    <TextView
+        android:id="@+id/tvUnreadCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="19dp"
+        android:layout_marginEnd="26dp"
+        android:maxLines="1"
+        android:visibility="gone"
+        android:textColor="@color/white"
+        android:background="@drawable/round_back_theme_1000"
+        android:padding="5dp"/>
+
+    <View
+        android:id="@+id/splitLine"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/profile_image"
+        android:layout_marginTop="20dp"
+        android:background="#6AC8C6C6" />
 
 </RelativeLayout>

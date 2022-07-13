@@ -25,7 +25,9 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:background="@drawable/background_right"
-            android:padding="8dp"
+            android:padding="10dp"
+            android:paddingStart="15dp"
+            android:paddingBottom="15dp"
             android:text="hello"
             android:textColor="#fff"
             android:textSize="18sp" />
@@ -38,6 +40,17 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             tools:text="seen" />
+
+        <ImageView
+            android:id="@+id/feeling"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:layout_below="@+id/show_message"
+            android:layout_alignStart="@+id/show_message"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginRight="10dp"
+            android:visibility="invisible" />
 
     </RelativeLayout>
 

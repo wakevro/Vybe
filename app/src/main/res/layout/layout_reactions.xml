@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/clMainReactions"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clReactions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_reactions"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/clMainReactions">
+
+        <ImageView
+            android:id="@+id/ic_fb_like"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/ic_fb_love"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_fb_like" />
+
+        <ImageView
+            android:id="@+id/ic_fb_love"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/ic_fb_like"
+            app:layout_constraintEnd_toStartOf="@+id/ic_fb_laugh"
+            app:layout_constraintStart_toEndOf="@+id/ic_fb_like"
+            app:layout_constraintTop_toTopOf="@+id/ic_fb_like"
+            app:layout_constraintVertical_bias="0.0"
+            app:srcCompat="@drawable/ic_fb_love" />
+
+        <ImageView
+            android:id="@+id/ic_fb_laugh"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/ic_fb_love"
+            app:layout_constraintEnd_toStartOf="@+id/ic_fb_wow"
+            app:layout_constraintStart_toEndOf="@+id/ic_fb_love"
+            app:layout_constraintTop_toTopOf="@+id/ic_fb_love"
+            app:layout_constraintVertical_bias="0.0"
+            app:srcCompat="@drawable/ic_fb_laugh" />
+
+        <ImageView
+            android:id="@+id/ic_fb_wow"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/ic_fb_laugh"
+            app:layout_constraintEnd_toStartOf="@+id/ic_fb_sad"
+            app:layout_constraintStart_toEndOf="@+id/ic_fb_laugh"
+            app:layout_constraintTop_toTopOf="@+id/ic_fb_laugh"
+            app:layout_constraintVertical_bias="0.0"
+            app:srcCompat="@drawable/ic_fb_wow" />
+
+        <ImageView
+            android:id="@+id/ic_fb_sad"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/ic_fb_wow"
+            app:layout_constraintEnd_toStartOf="@+id/ic_fb_angry"
+            app:layout_constraintStart_toEndOf="@+id/ic_fb_wow"
+            app:layout_constraintTop_toTopOf="@+id/ic_fb_wow"
+            app:layout_constraintVertical_bias="0.0"
+            app:srcCompat="@drawable/ic_fb_sad" />
+
+        <ImageView
+            android:id="@+id/ic_fb_angry"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintBottom_toBottomOf="@+id/ic_fb_sad"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/ic_fb_sad"
+            app:layout_constraintTop_toTopOf="@+id/ic_fb_sad"
+            app:srcCompat="@drawable/ic_fb_angry" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        app:layout_constraintEnd_toEndOf="@+id/clReactions"
+        app:layout_constraintTop_toBottomOf="@id/clReactions">
+
+
+        <TextView
+            android:id="@+id/tvCopy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/button_background"
+            android:padding="5dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:text="COPY"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/tvDelete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/button_background"
+            android:padding="5dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:text="DELETE"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@id/tvCopy"
+            app:layout_constraintTop_toBottomOf="@id/tvCopy" />
+
+        <TextView
+            android:id="@+id/tvEdit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/button_background"
+            android:padding="5dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:text="EDIT"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@id/tvDelete"
+            app:layout_constraintTop_toBottomOf="@id/tvDelete" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
