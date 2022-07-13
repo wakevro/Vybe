@@ -45,7 +45,7 @@ public class ProfileFragment extends Fragment {
 
         sharedPreferences = getContext().getSharedPreferences("SPOTIFY", 0);
         currentUser = sharedPreferences.getString("username", "") + " " + sharedPreferences.getString("userid", "");
-        databaseReference = FirebaseDatabase.getInstance().getReference().child(currentUser);
+        databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(currentUser);
 
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
