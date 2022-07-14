@@ -8,6 +8,7 @@
     tools:context=".Fragments.ProfileFragment">
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/profileCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardCornerRadius="15dp"
@@ -49,8 +50,47 @@
 
         </RelativeLayout>
 
-
-
     </androidx.cardview.widget.CardView>
+
+    <EditText
+        android:id="@+id/etLocation"
+        android:background="@drawable/text_input"
+        android:padding="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/profileCard"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:hint="Location..."
+        android:textColorHint="#8E8C8C"/>
+
+    <TextView
+        android:id="@+id/tvSaveLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etLocation"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/button_background"
+        android:padding="15dp"
+        android:text="SAVE"
+        android:textColor="@color/white"
+        android:textColorHint="#8E8C8C"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvLogout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="7dp"
+        android:layout_marginBottom="11dp"
+        android:background="@drawable/button_background"
+        android:padding="15dp"
+        android:text="LOGOUT"
+        android:textColor="@color/white"
+        android:textColorHint="#8E8C8C"
+        android:textStyle="bold" />
+
 
 </RelativeLayout>

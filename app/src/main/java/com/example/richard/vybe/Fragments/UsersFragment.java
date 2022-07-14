@@ -1,10 +1,10 @@
 package com.example.richard.vybe.Fragments;
 
+import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,7 +51,13 @@ public class UsersFragment extends Fragment {
 
         mUsers = new ArrayList<>();
 
+        ProgressDialog progressDialog = new ProgressDialog(getContext());
+        progressDialog.setCancelable(false);
+        progressDialog.setMessage("Loading...");
+        progressDialog.show();
+
         readUsers();
+        progressDialog.dismiss();
 
         etSearchUsers = view.findViewById(R.id.search_users);
         etSearchUsers.addTextChangedListener(new TextWatcher() {

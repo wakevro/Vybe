@@ -1,25 +1,22 @@
 package com.example.richard.vybe.Message;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.content.ClipboardManager;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
@@ -32,7 +29,6 @@ import com.example.richard.vybe.Notifications.Data;
 import com.example.richard.vybe.Notifications.MyResponse;
 import com.example.richard.vybe.Notifications.Sender;
 import com.example.richard.vybe.Notifications.Token;
-import com.example.richard.vybe.Profile.ProfileActivity;
 import com.example.richard.vybe.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -57,6 +53,8 @@ public class MessageActivity extends AppCompatActivity {
     private ImageView backButton;
     private TextView username;
     private TextView tvStatus;
+
+    ProgressDialog progressDialog;
 
     String currentUser;
     String userFullId;
@@ -83,6 +81,13 @@ public class MessageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
+
+
+        progressDialog = new ProgressDialog(MessageActivity.this);
+        progressDialog.setCancelable(false);
+        progressDialog.setMessage("Loading...");
+        progressDialog.show();
+
 
         apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
 
@@ -323,6 +328,7 @@ public class MessageActivity extends AppCompatActivity {
     }
 
     private void readMessages(String myid, String userid, String imageurl) {
+
         mchat = new ArrayList<>();
 
         databaseReference = FirebaseDatabase.getInstance().getReference("Chats");
@@ -339,6 +345,8 @@ public class MessageActivity extends AppCompatActivity {
 
                     messageAdapter = new MessageAdapter(MessageActivity.this, mchat, imageurl);
                     recyclerView.setAdapter(messageAdapter);
+                    progressDialog.dismiss();
+
                 }
             }
 

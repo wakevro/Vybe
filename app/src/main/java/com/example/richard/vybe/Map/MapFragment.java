@@ -1,6 +1,7 @@
 package com.example.richard.vybe.Map;
 
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -83,6 +84,10 @@ public class MapFragment extends Fragment {
 
         // Initialize map fragment
 
+        ProgressDialog progressDialog = new ProgressDialog(getContext());
+        progressDialog.setCancelable(false);
+        progressDialog.setMessage("Loading...");
+        progressDialog.show();
 
         SupportMapFragment supportMapFragment = (SupportMapFragment)
                 getChildFragmentManager().findFragmentById(R.id.map);
@@ -192,7 +197,7 @@ public class MapFragment extends Fragment {
             }
         });
 
-
+        progressDialog.dismiss();
         return view;
     }
 

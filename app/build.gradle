@@ -32,7 +32,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'com.lorentzos.swipecards:library:1.0.9'
     implementation 'com.android.volley:volley:1.1.1'
-    implementation 'com.spotify.android:auth:1.1.0'
+//    implementation 'com.spotify.android:auth:1.1.0'
     implementation 'com.fasterxml.jackson.core:jackson-core:2.8.5'
     implementation 'com.fasterxml.jackson.core:jackson-annotations:2.8.5'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.8.5'
@@ -68,5 +68,12 @@ dependencies {
 
     implementation 'com.google.android.gms:play-services-maps:18.0.1'
     implementation 'com.google.android.gms:play-services-location:17.0.0'
+
+    implementation 'com.google.maps.android:android-maps-utils:0.4+'
+
+
+    // Spotify
+    implementation project(':spotify-app-remote-release-0.6.1')
+    implementation 'com.spotify.android:auth:1.2.5' // Maven dependency
 }
 

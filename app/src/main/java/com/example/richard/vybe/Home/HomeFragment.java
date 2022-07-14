@@ -1,8 +1,10 @@
 package com.example.richard.vybe.Home;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,6 +54,12 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.activity_home, container, false);
 
+        ProgressDialog progressDialog = new ProgressDialog(getContext());
+        progressDialog.setCancelable(false);
+        progressDialog.setMessage("Loading...");
+        progressDialog.show();
+
+
         sharedPreferences = getContext().getSharedPreferences("SPOTIFY", 0);
         requestQueue = Volley.newRequestQueue(getContext());
         playlistService = new PlaylistService(requestQueue, sharedPreferences);
@@ -75,36 +83,46 @@ public class HomeFragment extends Fragment {
 
 
         UserService userService = new UserService(requestQueue, sharedPreferences);
-        userService.get(() -> {
-            User user = userService.getUser();
+        Log.i(TAG, "GOTTEN USER SERVICE.");
+        try {
+            userService.get(() -> {
+                Log.i(TAG, "STARTING TO GET USER.");
+                User user = userService.getUser();
+                Log.i(TAG, "USER NAME: " + user.getDisplay_name());
 
-            String userName = user.getDisplay_name().split(" ")[0];
-            userProfileImageURL = user.getProfileImageURL();
-            tvUsername.setText(userName);
+                Log.i(TAG, "IMAGE: " + user.getProfileImageURL());
 
-            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(sharedPreferences.getString("username", "") + " " + sharedPreferences.getString("userid", ""));
-            databaseReference.child("id").setValue(user.id);
-            databaseReference.child("name").setValue(user.display_name);
-            databaseReference.child("country").setValue(user.country);
-            databaseReference.child("status").setValue("offline");
-            databaseReference.child("search").setValue(user.display_name.toLowerCase());
+                String userName = user.getDisplay_name().split(" ")[0];
+                userProfileImageURL = user.getProfileImageURL();
+                tvUsername.setText(userName);
 
-            if (userProfileImageURL == null) {
-                databaseReference.child("profileImage").setValue("");
-                Glide.with(getContext())
-                        .load(R.drawable.man)
-                        .transform(new CircleCrop())
-                        .into(ivProfileImage);
-            } else {
-                databaseReference.child("profileImage").setValue(user.profileImageURL);
-                Glide.with(getContext())
-                        .load(userProfileImageURL)
-                        .transform(new CircleCrop())
-                        .into(ivProfileImage);
-            }
+                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(sharedPreferences.getString("username", "") + " " + sharedPreferences.getString("userid", ""));
+                databaseReference.child("id").setValue(user.id);
+                databaseReference.child("name").setValue(user.display_name);
+                databaseReference.child("country").setValue(user.country);
+                databaseReference.child("status").setValue("offline");
+                databaseReference.child("search").setValue(user.display_name.toLowerCase());
 
+                if (userProfileImageURL == null) {
+                    databaseReference.child("profileImage").setValue("");
+                    Glide.with(getContext())
+                            .load(R.drawable.man)
+                            .transform(new CircleCrop())
+                            .into(ivProfileImage);
+                } else {
+                    databaseReference.child("profileImage").setValue(user.profileImageURL);
+                    Glide.with(getContext())
+                            .load(userProfileImageURL)
+                            .transform(new CircleCrop())
+                            .into(ivProfileImage);
+                }
 
-        });
+                progressDialog.dismiss();
+            });
+        } catch (Exception e) {
+            Log.i(TAG, "Invalid user");
+        }
+
 
         return rootView;
     }
@@ -118,7 +136,15 @@ public class HomeFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        ProgressDialog progressDialog = new ProgressDialog(getContext());
+        progressDialog.setCancelable(false);
+        progressDialog.setMessage("Loading...");
+        progressDialog.show();
+
         getPlaylists();
+
+
+        progressDialog.dismiss();
 
     }
 
