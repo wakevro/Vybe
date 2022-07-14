@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
@@ -15,9 +16,12 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,6 +35,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -44,6 +50,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -52,13 +59,24 @@ public class MapFragment extends Fragment {
 
     private String TAG = "MapFragment";
 
+    public int radius = 1000;
+
+    private ImageButton btnUp;
+    private ImageButton btnDown;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_map, container, false);
 
+
+        btnUp = view.findViewById(R.id.btnUp);
+        btnDown = view.findViewById(R.id.btnDown);
+
+
         // Initialize map fragment
+
 
         SupportMapFragment supportMapFragment = (SupportMapFragment)
                 getChildFragmentManager().findFragmentById(R.id.map);
@@ -73,12 +91,42 @@ public class MapFragment extends Fragment {
         supportMapFragment.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(@NonNull GoogleMap googleMap) {
-                // When map is loaded
-                showMarkers(googleMap);
+
+                showMarkers(googleMap, radius);
+                btnUp.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (radius >= 2000) {
+                            radius = 2000;
+                            Toast.makeText(getContext(), "Maximum Radius!", Toast.LENGTH_SHORT).show();
+                        } else {
+                            radius += 200;
+                        }
+                        googleMap.clear();
+                        showMarkers(googleMap, radius);
+                        Log.i(TAG, "NEW RADIUS: " + radius);
+                    }
+                });
+
+                btnDown.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (radius <= 0) {
+                            radius = 0;
+                            Toast.makeText(getContext(), "Minimum Radius!", Toast.LENGTH_SHORT).show();
+                        } else {
+                            radius -= 200;
+                        }
+                        googleMap.clear();
+                        showMarkers(googleMap, radius);
+                        Log.i(TAG, "NEW RADIUS: " + radius);
+                    }
+                });
 
                 googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                     @Override
                     public boolean onMarkerClick(@NonNull Marker marker) {
+                        Toast.makeText(getContext(), "Clicked", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(getContext(), MessageActivity.class);
                         intent.putExtra("userFullId", marker.getTitle().toString());
                         getContext().startActivity(intent);
@@ -108,7 +156,7 @@ public class MapFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
     }
 
-    private void showMarkers(GoogleMap googleMap) {
+    private void showMarkers(GoogleMap googleMap, int radius) {
 
         final SharedPreferences sharedPreferences = getContext().getSharedPreferences("SPOTIFY", 0);
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Users");
@@ -117,7 +165,7 @@ public class MapFragment extends Fragment {
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
+                List<Marker> markers = new ArrayList<>();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     final String getUser = snapshot.getKey();
                     User user = new User();
@@ -127,6 +175,8 @@ public class MapFragment extends Fragment {
                         String username = snapshot.child("name").getValue().toString();
                         String userid = snapshot.child("id").getValue().toString();
                         String imageURL = snapshot.child("profileImage").getValue().toString();
+                        Log.i(TAG, "GOTTEN USER: " + getUser);
+                        Log.i(TAG, "GOTTEN LOCATION: " + location);
                         assert user != null;
                         assert currentUser != null;
 
@@ -134,28 +184,48 @@ public class MapFragment extends Fragment {
                             LatLng newLatLng = getLatLng(location);
 
                             if (newLatLng != null) {
-                                MarkerOptions markerOptions = new MarkerOptions();
-                                markerOptions.position(newLatLng);
-                                markerOptions.title(username + " " + userid);
+                                Log.i(TAG, "GOTTEN LATLNG: " +newLatLng);
+
+                                Marker marker = googleMap.addMarker(
+                                        new MarkerOptions()
+                                                .position(newLatLng)
+                                                .title(username + " " + userid)
+                                                .visible(false)
+                                );
+
                                 BitmapDrawable bitmapdraw = (BitmapDrawable)getResources().getDrawable(R.drawable.man);
                                 Bitmap b = bitmapdraw.getBitmap();
                                 Bitmap smallMarker = Bitmap.createScaledBitmap(b, 100, 100, false);
                                 if (imageURL.equals("")) {
-                                    markerOptions.icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
+                                    marker.setIcon(BitmapDescriptorFactory.fromBitmap(smallMarker));
                                 } else {
                                     Bitmap imageBitmap = Bitmap.createScaledBitmap(getBitmapFromLink(imageURL), 100, 100, false);
                                     Bitmap croppedImageBitmap = getCroppedBitmap(imageBitmap);
-                                    markerOptions.icon(BitmapDescriptorFactory.fromBitmap(croppedImageBitmap));
+                                    marker.setIcon(BitmapDescriptorFactory.fromBitmap(croppedImageBitmap));
                                 }
 
-                                googleMap.addMarker(markerOptions);
-                                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(newLatLng, 15));
+                                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(newLatLng, 14));
+                                markers.add(marker);
 
+                                LatLng midLatLng = getLatLng("830 east El Camino real Sunnyvale california");
+
+                                for (Marker marker1 : markers) {
+                                    if (distance(midLatLng.latitude, midLatLng.longitude, marker1.getPosition().latitude, marker1.getPosition().longitude)  < (radius/375)) {
+                                        marker1.setVisible(true);
+                                    }
+                                }
                             }
                         }
                     }
 
                 }
+
+                LatLng midLatLng = getLatLng("830 east El Camino real Sunnyvale california");
+                Circle circle = googleMap.addCircle(new CircleOptions()
+                        .center(midLatLng)
+                        .radius(radius)
+                        .strokeColor(Color.rgb(0, 136, 255))
+                        .fillColor(Color.argb(20, 0, 136, 255)));
             }
 
             @Override
@@ -163,6 +233,27 @@ public class MapFragment extends Fragment {
 
             }
         });
+    }
+
+    private double distance(double lat1, double lon1, double lat2, double lon2) {
+        double theta = lon1 - lon2;
+        double dist = Math.sin(deg2rad(lat1))
+                * Math.sin(deg2rad(lat2))
+                + Math.cos(deg2rad(lat1))
+                * Math.cos(deg2rad(lat2))
+                * Math.cos(deg2rad(theta));
+        dist = Math.acos(dist);
+        dist = rad2deg(dist);
+        dist = dist * 60 * 1.1515;
+        return (dist);
+    }
+
+    private double deg2rad(double deg) {
+        return (deg * Math.PI / 180.0);
+    }
+
+    private double rad2deg(double rad) {
+        return (rad * 180.0 / Math.PI);
     }
 
     public Bitmap getBitmapFromLink(String link) {
