@@ -64,6 +64,9 @@ public class MapFragment extends Fragment {
     private ImageButton btnUp;
     private ImageButton btnDown;
 
+    public List<Marker> markers;
+    public List<User> users;
+    public Circle circle;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -76,7 +79,6 @@ public class MapFragment extends Fragment {
 
 
         // Initialize map fragment
-
 
         SupportMapFragment supportMapFragment = (SupportMapFragment)
                 getChildFragmentManager().findFragmentById(R.id.map);
@@ -92,8 +94,7 @@ public class MapFragment extends Fragment {
             @Override
             public void onMapReady(@NonNull GoogleMap googleMap) {
 
-                // When map is loaded
-
+                googleMap.clear();
                 showMarkers(googleMap, radius);
                 btnUp.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -132,9 +133,8 @@ public class MapFragment extends Fragment {
                         Intent intent = new Intent(getContext(), MessageActivity.class);
                         intent.putExtra("userFullId", marker.getTitle().toString());
                         getContext().startActivity(intent);
-                        if (marker.getTitle().equals("Richard")) {
-
-                        }
+                        radius = 1000;
+                        googleMap.clear();
                         return false;
                     }
                 });
@@ -164,77 +164,137 @@ public class MapFragment extends Fragment {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Users");
         String currentUser = sharedPreferences.getString("username", "") + " " + sharedPreferences.getString("userid", "");
 
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                List<Marker> markers = new ArrayList<>();
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    final String getUser = snapshot.getKey();
-                    User user = new User();
+        googleMap.clear();
 
-                    if (snapshot.hasChild("id") && snapshot.hasChild("name") && snapshot.hasChild("profileImage")) {
-                        String location  = snapshot.child("location").getValue().toString();
-                        String username = snapshot.child("name").getValue().toString();
-                        String userid = snapshot.child("id").getValue().toString();
-                        String imageURL = snapshot.child("profileImage").getValue().toString();
-                        Log.i(TAG, "GOTTEN USER: " + getUser);
-                        Log.i(TAG, "GOTTEN LOCATION: " + location);
-                        assert user != null;
-                        assert currentUser != null;
+        if (markers == null) {
+            databaseReference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    markers = new ArrayList<>();
+                    users = new ArrayList<>();
 
-                        if (!getUser.equals(currentUser) && !location.equals("")) {
-                            LatLng newLatLng = getLatLng(location);
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        final String getUser = snapshot.getKey();
 
-                            if (newLatLng != null) {
-                                Log.i(TAG, "GOTTEN LATLNG: " +newLatLng);
+                        if (snapshot.hasChild("id") && snapshot.hasChild("name") && snapshot.hasChild("profileImage")) {
+                            User newUser = new User();
+                            String location  = snapshot.child("location").getValue().toString();
+                            String username = snapshot.child("name").getValue().toString();
+                            String userid = snapshot.child("id").getValue().toString();
+                            String imageURL = snapshot.child("profileImage").getValue().toString();
+                            Log.i(TAG, "GOTTEN USER: " + getUser);
+                            Log.i(TAG, "GOTTEN LOCATION: " + location);
+                            newUser.setDisplay_name(username);
+                            newUser.setId(userid);
+                            newUser.setProfileImageURL(imageURL);
+                            Log.i(TAG, "USER: " + newUser.getDisplay_name());
 
-                                Marker marker = googleMap.addMarker(
-                                        new MarkerOptions()
-                                                .position(newLatLng)
-                                                .title(username + " " + userid)
-                                                .visible(false)
-                                );
 
-                                BitmapDrawable bitmapdraw = (BitmapDrawable)getResources().getDrawable(R.drawable.man);
-                                Bitmap b = bitmapdraw.getBitmap();
-                                Bitmap smallMarker = Bitmap.createScaledBitmap(b, 100, 100, false);
-                                if (imageURL.equals("")) {
-                                    marker.setIcon(BitmapDescriptorFactory.fromBitmap(smallMarker));
-                                } else {
-                                    Bitmap imageBitmap = Bitmap.createScaledBitmap(getBitmapFromLink(imageURL), 100, 100, false);
-                                    Bitmap croppedImageBitmap = getCroppedBitmap(imageBitmap);
-                                    marker.setIcon(BitmapDescriptorFactory.fromBitmap(croppedImageBitmap));
-                                }
-                                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(newLatLng, 14));
-                                markers.add(marker);
+                            assert newUser != null;
+                            assert currentUser != null;
 
-                                LatLng midLatLng = getLatLng("830 east El Camino real Sunnyvale california");
-                                for (Marker marker1 : markers) {
-                                    double calculatedDistance = distance(midLatLng.latitude, midLatLng.longitude, marker1.getPosition().latitude, marker1.getPosition().longitude);
-                                    Log.i(TAG, "CALCULATED DISTANCE: " + calculatedDistance);
-                                    if ( calculatedDistance < (radius/2)) {
-                                        marker1.setVisible(true);
+                            if (newUser != null) {
+                                users.add(newUser);
+                            }
+
+
+                            if (!getUser.equals(currentUser) && !location.equals("")) {
+                                LatLng newLatLng = getLatLng(location);
+
+                                if (newLatLng != null) {
+                                    Log.i(TAG, "GOTTEN LATLNG: " +newLatLng);
+
+                                    Marker marker = googleMap.addMarker(
+                                            new MarkerOptions()
+                                                    .position(newLatLng)
+                                                    .title(username + " " + userid)
+                                                    .visible(false)
+                                    );
+
+                                    BitmapDrawable bitmapdraw = (BitmapDrawable)getResources().getDrawable(R.drawable.man);
+                                    Bitmap b = bitmapdraw.getBitmap();
+                                    Bitmap smallMarker = Bitmap.createScaledBitmap(b, 100, 100, false);
+                                    if (imageURL.equals("")) {
+                                        marker.setIcon(BitmapDescriptorFactory.fromBitmap(smallMarker));
+                                    } else {
+                                        Bitmap imageBitmap = Bitmap.createScaledBitmap(getBitmapFromLink(imageURL), 100, 100, false);
+                                        Bitmap croppedImageBitmap = getCroppedBitmap(imageBitmap);
+                                        marker.setIcon(BitmapDescriptorFactory.fromBitmap(croppedImageBitmap));
+                                    }
+
+                                    googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(newLatLng, 14));
+                                    markers.add(marker);
+
+                                    LatLng midLatLng = getLatLng("830 east El Camino real Sunnyvale california");
+                                    for (Marker marker1 : markers) {
+                                        double calculatedDistance = distance(midLatLng.latitude, midLatLng.longitude, marker1.getPosition().latitude, marker1.getPosition().longitude);
+                                        Log.i(TAG, "CALCULATED DISTANCE: " + calculatedDistance);
+                                        if ( calculatedDistance < (radius/2)) {
+                                            marker1.setVisible(true);
+                                        }
                                     }
                                 }
+                            }
+                        }
+
+                    }
+
+                    LatLng midLatLng = getLatLng("830 east El Camino real Sunnyvale california");
+                    Circle circle = googleMap.addCircle(new CircleOptions()
+                            .center(midLatLng)
+                            .radius(radius)
+                            .strokeColor(Color.rgb(0, 136, 255))
+                            .fillColor(Color.argb(20, 0, 136, 255)));
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        }
+
+        else {
+            LatLng midLatLng = getLatLng("830 east El Camino real Sunnyvale california");
+            for (Marker marker1 : markers) {
+                double calculatedDistance = distance(midLatLng.latitude, midLatLng.longitude, marker1.getPosition().latitude, marker1.getPosition().longitude);
+                Log.i(TAG, "CALCULATED DISTANCE AFTER SAVING MARKERS: " + calculatedDistance);
+                if ( calculatedDistance < (radius/2)) {
+                    Log.i(TAG, "Saved marker: " + marker1.getTitle());
+                    Marker marker = googleMap.addMarker(
+                            new MarkerOptions()
+                                    .position(marker1.getPosition())
+                                    .title(marker1.getTitle())
+                                    .visible(true)
+                    );
+
+                    for (User user1 : users) {
+                        if (marker1.getTitle().equals(user1.display_name + " " + user1.getId())) {
+                            BitmapDrawable bitmapdraw = (BitmapDrawable)getResources().getDrawable(R.drawable.man);
+                            Bitmap b = bitmapdraw.getBitmap();
+                            Bitmap smallMarker = Bitmap.createScaledBitmap(b, 100, 100, false);
+                            if (user1.getProfileImageURL().equals("")) {
+                                marker.setIcon(BitmapDescriptorFactory.fromBitmap(smallMarker));
+                            } else {
+                                Bitmap imageBitmap = Bitmap.createScaledBitmap(getBitmapFromLink(user1.getProfileImageURL()), 100, 100, false);
+                                Bitmap croppedImageBitmap = getCroppedBitmap(imageBitmap);
+                                marker.setIcon(BitmapDescriptorFactory.fromBitmap(croppedImageBitmap));
                             }
                         }
                     }
 
                 }
-
-                LatLng midLatLng = getLatLng("830 east El Camino real Sunnyvale california");
-                Circle circle = googleMap.addCircle(new CircleOptions()
-                        .center(midLatLng)
-                        .radius(radius)
-                        .strokeColor(Color.rgb(0, 136, 255))
-                        .fillColor(Color.argb(20, 0, 136, 255)));
             }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
 
-            }
-        });
+            circle = googleMap.addCircle(new CircleOptions()
+                    .center(midLatLng)
+                    .radius(radius)
+                    .strokeColor(Color.rgb(0, 136, 255))
+                    .fillColor(Color.argb(20, 0, 136, 255)));
+
+        }
+
     }
 
     private double distance(double lat1, double lon1, double lat2, double lon2) {
@@ -320,4 +380,3 @@ public class MapFragment extends Fragment {
     }
 
 }
-
