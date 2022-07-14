@@ -1,0 +1,2 @@
+-keep class com.spotify.protocol.types.Item
+-keep class * implements com.spotify.protocol.types.Item { *; }

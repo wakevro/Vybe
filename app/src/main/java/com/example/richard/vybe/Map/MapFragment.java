@@ -92,6 +92,8 @@ public class MapFragment extends Fragment {
             @Override
             public void onMapReady(@NonNull GoogleMap googleMap) {
 
+                // When map is loaded
+
                 showMarkers(googleMap, radius);
                 btnUp.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -203,14 +205,14 @@ public class MapFragment extends Fragment {
                                     Bitmap croppedImageBitmap = getCroppedBitmap(imageBitmap);
                                     marker.setIcon(BitmapDescriptorFactory.fromBitmap(croppedImageBitmap));
                                 }
-
                                 googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(newLatLng, 14));
                                 markers.add(marker);
 
                                 LatLng midLatLng = getLatLng("830 east El Camino real Sunnyvale california");
-
                                 for (Marker marker1 : markers) {
-                                    if (distance(midLatLng.latitude, midLatLng.longitude, marker1.getPosition().latitude, marker1.getPosition().longitude)  < (radius/375)) {
+                                    double calculatedDistance = distance(midLatLng.latitude, midLatLng.longitude, marker1.getPosition().latitude, marker1.getPosition().longitude);
+                                    Log.i(TAG, "CALCULATED DISTANCE: " + calculatedDistance);
+                                    if ( calculatedDistance < (radius/2)) {
                                         marker1.setVisible(true);
                                     }
                                 }
@@ -245,6 +247,7 @@ public class MapFragment extends Fragment {
         dist = Math.acos(dist);
         dist = rad2deg(dist);
         dist = dist * 60 * 1.1515;
+        dist = dist * 1000;
         return (dist);
     }
 
