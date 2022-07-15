@@ -450,7 +450,7 @@ public class MapFragment extends Fragment {
 
         LatLng newUserLatLng = getLatLng(location);
 
-        if (midLatLng != null) {
+        if (midLatLng != null && newUserLatLng != null) {
             double calculatedDistance = distance(midLatLng.latitude, midLatLng.longitude, newUserLatLng.latitude, newUserLatLng.longitude);
             if (calculatedDistance < (MAX_RADIUS / 2)) {
                 return true;
