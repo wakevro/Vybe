@@ -19,7 +19,7 @@
         android:layout_toRightOf="@id/profile_image"
         android:background="@drawable/background_left"
         android:padding="10dp"
-        android:text="hello"
+        android:text="@string/hello"
         android:textSize="18sp" />
 
     <TextView

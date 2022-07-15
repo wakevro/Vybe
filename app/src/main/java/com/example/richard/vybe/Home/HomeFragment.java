@@ -55,7 +55,7 @@ public class HomeFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.activity_home, container, false);
 
         ProgressDialog progressDialog = new ProgressDialog(getContext());
-        progressDialog.setCancelable(false);
+        progressDialog.setCancelable(true);
         progressDialog.setMessage("Loading...");
         progressDialog.show();
 
@@ -137,7 +137,7 @@ public class HomeFragment extends Fragment {
     public void onResume() {
         super.onResume();
         ProgressDialog progressDialog = new ProgressDialog(getContext());
-        progressDialog.setCancelable(false);
+        progressDialog.setCancelable(true);
         progressDialog.setMessage("Loading...");
         progressDialog.show();
 

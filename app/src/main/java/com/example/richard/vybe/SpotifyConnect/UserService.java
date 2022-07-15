@@ -1,5 +1,6 @@
 package com.example.richard.vybe.SpotifyConnect;
 
+import android.app.Activity;
 import android.content.SharedPreferences;
 import android.util.Log;
 
@@ -17,7 +18,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class UserService {
+public class UserService extends Activity {
 
     private String TAG = "UserService";
 
@@ -25,6 +26,7 @@ public class UserService {
     private SharedPreferences msharedPreferences;
     private RequestQueue mqueue;
     private User user;
+    private int stopCount = 0;
 
     public UserService(RequestQueue queue, SharedPreferences sharedPreferences) {
         mqueue = queue;
@@ -36,36 +38,43 @@ public class UserService {
     }
 
     public void get(final VolleyCallBack callBack) {
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(ENDPOINT, null, response -> {
-            Gson gson = new Gson();
-            user = gson.fromJson(response.toString(), User.class);
-            try {
-                user.setId(response.getString("id"));
-                user.setDisplay_name(response.getString("display_name"));
-                user.setEmail(response.getString("email"));
-                user.setCountry(response.getString("country"));
-                user.setEmail("email");
+        stopCount += 1;
+        if (stopCount  < 4) {
+            Log.i(TAG, "REACHED GET");
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(ENDPOINT, null, response -> {
+                Gson gson = new Gson();
+                user = gson.fromJson(response.toString(), User.class);
+                try {
+                    user.setId(response.getString("id"));
+                    user.setDisplay_name(response.getString("display_name"));
+                    user.setEmail(response.getString("email"));
+                    user.setCountry(response.getString("country"));
+                    user.setEmail("email");
 
-                JSONObject image = response.getJSONArray("images").getJSONObject(0);
-                user.setProfileImageURL(image.getString("url"));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+                    JSONObject image = response.getJSONArray("images").getJSONObject(0);
+                    user.setProfileImageURL(image.getString("url"));
+                } catch (JSONException e) {
 
-            callBack.onSuccess();
-        }, error -> get(() -> {
+                    e.printStackTrace();
+                }
 
-        })) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> headers = new HashMap<>();
-                String token = msharedPreferences.getString("token", "");
-                String auth = "Bearer " + token;
-                headers.put("Authorization", auth);
-                return headers;
-            }
-        };
-        mqueue.add(jsonObjectRequest);
+                callBack.onSuccess();
+            }, error -> get(() -> {
+
+            })) {
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    Map<String, String> headers = new HashMap<>();
+                    String token = msharedPreferences.getString("token", "");
+                    String auth = "Bearer " + token;
+                    headers.put("Authorization", auth);
+                    return headers;
+                }
+            };
+            mqueue.add(jsonObjectRequest);
+        } else {
+            finish();
+        }
     }
 
 

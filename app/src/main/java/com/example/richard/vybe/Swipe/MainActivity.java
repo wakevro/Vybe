@@ -1,5 +1,6 @@
 package com.example.richard.vybe.Swipe;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -14,6 +15,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.richard.vybe.Home.HomeFragment;
 import com.example.richard.vybe.Overview.OverviewFragment;
+import com.example.richard.vybe.Profile.ProfileActivity;
 import com.example.richard.vybe.R;
 import com.example.richard.vybe.Sentiment.SentimentFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -33,6 +35,7 @@ public class MainActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG, "STARTED MAIN ACTIVITY");
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
 
@@ -60,21 +63,25 @@ public class MainActivity extends FragmentActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
-                if (item.getItemId()==R.id.miHome){
+                if (item.getItemId()== R.id.miHome){
                     viewPager2.setCurrentItem(0);
-
                     return true;
                 }
-                if (item.getItemId()==R.id.miAddMood){
+                if (item.getItemId()== R.id.miAddMood){
                     viewPager2.setCurrentItem(1);
 
                     return true;
                 }
-                if (item.getItemId()==R.id.miSwipe){
+                if (item.getItemId()== R.id.miSwipe){
                     viewPager2.setCurrentItem(2);
                     return true;
                 }
 
+                if (item.getItemId()== R.id.miProfile){
+                    Intent profileIntent = new Intent(MainActivity.this, ProfileActivity.class);
+                    startActivity(profileIntent);
+                    return true;
+                }
                 return true;
             }
         });
@@ -154,9 +161,11 @@ public class MainActivity extends FragmentActivity {
                     view.setTranslationX(-horzMargin + vertMargin / 2);
                 }
 
+                // scale the page down
                 view.setScaleX(scaleFactor);
                 view.setScaleY(scaleFactor);
 
+                //fade the page relative to its size
                 view.setAlpha(MIN_ALPHA + (scaleFactor - MIN_SCALE)/ (1 - MIN_SCALE) * (1 - MIN_ALPHA));
 
             }   else {

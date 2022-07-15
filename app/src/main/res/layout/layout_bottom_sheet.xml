@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:padding="5dp"
-            android:text="Create"
+            android:text="@string/create"
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -51,31 +51,34 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/clCreateInfo">
 
-        <com.makeramen.roundedimageview.RoundedImageView
-            android:id="@+id/roundedImageView"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_margin="10dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/man"
+
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/ltPlaylistCover"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:riv_corner_radius="10dp" />
+            app:lottie_rawRes="@raw/playlistimage"
+            app:lottie_autoPlay="true"
+            app:lottie_repeatMode="reverse"
+            app:lottie_loop="true"
+            />
 
         <EditText
             android:id="@+id/etPlaylistName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="Playlist Name."
+            android:hint="@string/playlist_name"
             android:inputType="textPersonName"
             android:padding="15dp"
             android:minHeight="48dp"
             android:background="@drawable/text_input"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/roundedImageView"
+            app:layout_constraintStart_toEndOf="@+id/ltPlaylistCover"
             app:layout_constraintTop_toTopOf="parent" />
 
 
@@ -104,7 +107,7 @@
             android:layout_marginEnd="20dp"
             android:layout_marginBottom="15dp"
             android:background="@drawable/button_background"
-            android:text="CREATE PLAYLIST"
+            android:text="@string/create_playlist"
             android:textColor="#FFFFFF"
             android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="parent"

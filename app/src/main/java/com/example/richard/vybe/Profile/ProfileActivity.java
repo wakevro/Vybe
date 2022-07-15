@@ -1,7 +1,9 @@
 package com.example.richard.vybe.Profile;
 
+import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,6 +23,8 @@ import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.example.richard.vybe.Fragments.ChatsFragment;
 import com.example.richard.vybe.Fragments.ProfileFragment;
 import com.example.richard.vybe.Fragments.UsersFragment;
+import com.example.richard.vybe.Map.MapFragment;
+import com.example.richard.vybe.Model.Chat;
 import com.example.richard.vybe.Model.User;
 import com.example.richard.vybe.R;
 import com.google.android.material.tabs.TabLayout;
@@ -38,6 +42,7 @@ public class ProfileActivity extends AppCompatActivity {
     private String TAG = "ProfileActivity";
 
 
+    String currentUser;
     private DatabaseReference reference;
     private SharedPreferences sharedPreferences;
     private RequestQueue requestQueue;
@@ -46,6 +51,7 @@ public class ProfileActivity extends AppCompatActivity {
     private String userProfileImageURL;
 
     private ImageView profile_image;
+    private ImageView profileBack;
     private TextView tvUsername;
 
 
@@ -60,12 +66,27 @@ public class ProfileActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("");
 
         profile_image = findViewById(R.id.profile_image);
+        profileBack = findViewById(R.id.profileBack);
         tvUsername = findViewById(R.id.username);
 
+
+        profileBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
+        ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setCancelable(true);
+        progressDialog.setMessage("Loading...");
+        progressDialog.show();
+
         sharedPreferences = this.getSharedPreferences("SPOTIFY", 0);
+        currentUser = sharedPreferences.getString("username", "") + " " + sharedPreferences.getString("userid", "");
         requestQueue = Volley.newRequestQueue(this);
 
-        reference = FirebaseDatabase.getInstance().getReference().child(sharedPreferences.getString("username", "") + " " + sharedPreferences.getString("userid", ""));
+        reference = FirebaseDatabase.getInstance().getReference("Users").child(sharedPreferences.getString("username", "") + " " + sharedPreferences.getString("userid", ""));
 
         reference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -101,6 +122,7 @@ public class ProfileActivity extends AppCompatActivity {
                             .into(profile_image);
                 }
 
+
             }
 
             @Override
@@ -111,17 +133,62 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
 
-        TabLayout tabLayout = findViewById(R.id.tab_layout);
-        ViewPager viewPager = findViewById(R.id.view_pager);
 
-        ViewPageAdapter viewPageAdapter = new ViewPageAdapter(getSupportFragmentManager());
 
-        viewPageAdapter.addFragment(new ChatsFragment(), "Chats");
-        viewPageAdapter.addFragment(new UsersFragment(), "Users");
-        viewPageAdapter.addFragment(new ProfileFragment(), "Profile");
+        final TabLayout tabLayout = findViewById(R.id.tab_layout);
+        final ViewPager viewPager = findViewById(R.id.view_pager);
 
-        viewPager.setAdapter(viewPageAdapter);
-        tabLayout.setupWithViewPager(viewPager);
+
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(currentUser);
+
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (!dataSnapshot.hasChild("location")) {
+                    databaseReference.child("location").setValue("");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        reference = FirebaseDatabase.getInstance().getReference("Chats");
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                ViewPageAdapter viewPageAdapter = new ViewPageAdapter(getSupportFragmentManager());
+                int unread = 0;
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Chat chat = snapshot.getValue(Chat.class);
+                    if (chat.getReceiver().equals(currentUser) && !chat.isIsseen()) {
+                        unread ++;
+                    }
+                }
+
+                if (unread == 0) {
+                    viewPageAdapter.addFragment(new ChatsFragment(), "Chats");
+                } else{
+                    viewPageAdapter.addFragment(new ChatsFragment(), "(" + unread + ") Chats");
+                }
+
+                viewPageAdapter.addFragment(new UsersFragment(), "Users");
+                viewPageAdapter.addFragment(new ProfileFragment(), "Profile");
+                viewPageAdapter.addFragment(new MapFragment(), "Map");
+
+                viewPager.setAdapter(viewPageAdapter);
+                tabLayout.setupWithViewPager(viewPager);
+                progressDialog.dismiss();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
 
 
     }
@@ -167,7 +234,7 @@ public class ProfileActivity extends AppCompatActivity {
         hashMap.put("status", status);
 
         String currentUser = sharedPreferences.getString("username", "") + " " + sharedPreferences.getString("userid", "");
-        reference = FirebaseDatabase.getInstance().getReference().child(currentUser);
+        reference = FirebaseDatabase.getInstance().getReference("Users").child(currentUser);
         reference.updateChildren(hashMap);
     }
 
@@ -180,6 +247,12 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        status("offline");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
         status("offline");
     }
 }

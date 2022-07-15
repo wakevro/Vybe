@@ -54,7 +54,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:text="Username"
+                android:text="@string/username"
                 android:textColor="@color/white"
                 android:textSize="18sp"
                 android:textStyle="bold"
@@ -98,7 +98,7 @@
             android:id="@+id/text_send"
             android:background="@drawable/text_input"
             android:padding="10dp"
-            android:hint="Type a message..."
+            android:hint="@string/type_a_message"
             android:layout_toLeftOf="@id/btn_send"
             android:layout_centerVertical="true"/>
 

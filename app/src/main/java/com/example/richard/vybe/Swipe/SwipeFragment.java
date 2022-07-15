@@ -64,7 +64,6 @@ public class SwipeFragment extends Fragment {
     private int currentProgress = 0;
     private int progressMax = 0;
     ImageButton reloadBtn;
-    ImageButton settingsBtn;
     private ProgressBar progressBar;
 
     MediaPlayer mediaPlayer;
@@ -78,14 +77,12 @@ public class SwipeFragment extends Fragment {
 
 
         reloadBtn = rootView.findViewById(R.id.reload);
-        settingsBtn = rootView.findViewById(R.id.settings);
         progressBar = rootView.findViewById(R.id.pbSwipeProgress);
 
         reloadBtn.setOnClickListener(reloadListener);
-        settingsBtn.setOnClickListener(settingsListener);
 
-        songDB = FirebaseDatabase.getInstance().getReference().child(sharedPreferences.getString("username", "") + " " + sharedPreferences.getString("userid", "")).child("Tracks");
-        sentimentDB = FirebaseDatabase.getInstance().getReference().child(sharedPreferences.getString("username", "") + " " + sharedPreferences.getString("userid", "")).child("Sentiment");
+        songDB = FirebaseDatabase.getInstance().getReference("Users").child(sharedPreferences.getString("username", "") + " " + sharedPreferences.getString("userid", "")).child("Tracks");
+        sentimentDB = FirebaseDatabase.getInstance().getReference("Users").child(sharedPreferences.getString("username", "") + " " + sharedPreferences.getString("userid", "")).child("Sentiment");
 
         spotifyConnector = new SpotifyConnector(getContext());
 
@@ -107,7 +104,6 @@ public class SwipeFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-
         getTracks();
     }
 
@@ -158,7 +154,6 @@ public class SwipeFragment extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
 
@@ -247,7 +242,10 @@ public class SwipeFragment extends Fragment {
         @Override
         public void onItemClicked(int i, Object o) {
             Song song = (Song) o;
+
             autoPlaySong(song);
+
+
         }
 
     };
@@ -266,14 +264,14 @@ public class SwipeFragment extends Fragment {
     };
 
     private void deleteTracks() {
-        databaseReference = FirebaseDatabase.getInstance().getReference().child(sharedPreferences.getString("username", "") + " " + sharedPreferences.getString("userid", ""));
+        databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(sharedPreferences.getString("username", "") + " " + sharedPreferences.getString("userid", ""));
         databaseReference.child("Tracks").removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
                 }
                 else {
-                    Toast.makeText(getActivity(), "Failed to delete!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), getActivity().getString(R.string.failed_to_delete), Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -357,28 +355,37 @@ public class SwipeFragment extends Fragment {
 
     private void autoPlaySong(Song song) {
 
-        startedPlaying = true;
+
         if (mediaPlayer!=null){
+            Log.i(TAG, "Media Player is not null");
             mediaPlayer.stop();
             mediaPlayer.release();
         }
 
         String songPreview = song.getPreviewURL();
-        mediaPlayer = new MediaPlayer();
+        if (songPreview != "null") {
+            startedPlaying = true;
+            mediaPlayer = new MediaPlayer();
 
-        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-        try {
-            mediaPlayer.setDataSource(songPreview);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            mediaPlayer.prepare();
-        } catch (IOException e) {
-            e.printStackTrace();
+            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+            try {
+                mediaPlayer.setDataSource(songPreview);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                mediaPlayer.prepare();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            mediaPlayer.start();
+        } else {
+            Toast.makeText(getContext(), getContext().getString(R.string.no_preview), Toast.LENGTH_SHORT).show();
+            startedPlaying = false;
+            mediaPlayer = null;
         }
 
-        mediaPlayer.start();
     }
 
     private void autoStopSong() {
@@ -404,6 +411,5 @@ public class SwipeFragment extends Fragment {
         }
 
     }
-
 
 }

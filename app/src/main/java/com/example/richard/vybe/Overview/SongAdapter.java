@@ -46,7 +46,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.MyViewHolder> 
 
             spotifyConnector = new SpotifyConnector(context);
             sharedPreferences = context.getSharedPreferences("SPOTIFY", 0);
-            databaseReference = FirebaseDatabase.getInstance().getReference().child(sharedPreferences.getString("username", "") + " " + sharedPreferences.getString("userid", "")).child("Tracks");
+            databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(sharedPreferences.getString("username", "") + " " + sharedPreferences.getString("userid", "")).child("Tracks");
 
             itemView.setOnClickListener(this);
 
@@ -102,6 +102,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.MyViewHolder> 
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
+        Log.i(TAG, "Artist name: " + mDataset.get(position).getArtist());
         holder.tvOverviewSongName.setText(mDataset.get(position).getName());
         holder.tvOverviewSongArtist.setText(mDataset.get(position).getArtist());
         holder.song = mDataset.get(position);

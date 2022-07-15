@@ -25,7 +25,7 @@
             android:layout_marginStart="20dp"
             android:layout_marginTop="10dp"
             android:padding="5dp"
-            android:text="CANCEL"
+            android:text="@string/cancel"
             android:textColor="@color/colorPrimary"
             android:textSize="18sp"
             android:textStyle="bold"
@@ -61,7 +61,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="You will be redirected to Spotify."
+            android:text="@string/you_will_be_redirected_to_spotify"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -72,7 +72,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:layout_marginBottom="40dp"
-            android:text="Kindly restart this app after logging out."
+            android:text="@string/kindly_restart_this_app_after_logging_out"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/tvRedirect"
             app:layout_constraintStart_toStartOf="@+id/tvRedirect"
@@ -97,20 +97,24 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/clPlaylistName">
 
-        <ImageView
-            android:id="@+id/ivSpotify"
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/ltSpotify"
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:layout_marginTop="15dp"
             android:layout_marginBottom="15dp"
-            android:background="@drawable/spotify"
-            android:textColor="#FFFFFF"
-            android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0" />
+            app:lottie_autoPlay="true"
+            app:lottie_repeatMode="reverse"
+            app:lottie_speed="2.5"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/spotify"
+            />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

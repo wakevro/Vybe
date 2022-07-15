@@ -125,10 +125,16 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
         SharedPreferences sharedPreferences = this.getSharedPreferences("SPOTIFY", 0);
         String currentUser = sharedPreferences.getString("username", "") + " " + sharedPreferences.getString("userid", "");
 
-        String refreshToken = FirebaseInstanceId.getInstance().getInstanceId().getResult().getToken();
-        if (currentUser != null) {
-            updateToken(refreshToken);
+        try {
+            String refreshToken = FirebaseInstanceId.getInstance().getInstanceId().getResult().getToken();
+            if (currentUser != null) {
+                updateToken(refreshToken);
+            }
+        } catch (Exception e) {
+
         }
+
+
     }
 
     private void updateToken(String refreshToken) {

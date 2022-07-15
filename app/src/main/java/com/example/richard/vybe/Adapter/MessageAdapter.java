@@ -62,21 +62,21 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 
     @NonNull
     @Override
-    public MessageAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         if (viewType == MSG_TYPE_RIGHT) {
             View view = LayoutInflater.from(mContext).inflate(R.layout.chat_item_right, parent, false);
-            return new MessageAdapter.ViewHolder(view);
+            return new ViewHolder(view);
         } else {
             View view = LayoutInflater.from(mContext).inflate(R.layout.chat_item_left, parent, false);
-            return new MessageAdapter.ViewHolder(view);
+            return new ViewHolder(view);
         }
 
 
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MessageAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
         Chat chat = mChat.get(position);
 
@@ -95,6 +95,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         }
 
         holder.showMessage.setText(chat.getMessage());
+
 
         holder.showMessage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -146,10 +147,10 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
-                                    Toast.makeText(mContext, "Successfully deleted!", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(mContext, mContext.getString(R.string.successfully_deleted), Toast.LENGTH_SHORT).show();
                                 }
                                 else {
-                                    Toast.makeText(mContext, "Failed to delete!", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(mContext, mContext.getString(R.string.failed_to_delete), Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
@@ -280,9 +281,9 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 
         if (position == mChat.size()-1) {
             if (chat.isIsseen()) {
-                holder.tvSeen.setText("Seen");
+                holder.tvSeen.setText(R.string.seen);
             } else {
-                holder.tvSeen.setText("Delivered");
+                holder.tvSeen.setText(R.string.delivered);
             }
         } else {
             holder.tvSeen.setVisibility(View.GONE);
@@ -301,7 +302,6 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         public ImageView profile_image;
         public TextView tvSeen;
         public ImageView feeling;
-
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -353,7 +353,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         });
     }
 
-    private void processReaction(int result, MessageAdapter.ViewHolder holder, Chat chat, int[] reactions) {
+    private void processReaction(int result, ViewHolder holder, Chat chat, int[] reactions) {
         if (result != -1) {
             if (result == chat.getReaction()) {
                 holder.feeling.setVisibility(View.INVISIBLE);

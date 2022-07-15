@@ -37,7 +37,7 @@
         android:layout_marginTop="10dp"
         android:maxEms="15"
         android:maxLines="5"
-        android:text="Song name"
+        android:text="@string/song_name"
         android:textColor="@android:color/black"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/ivOverviewSongImage"
@@ -48,7 +48,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
-        android:text="Song Artist"
+        android:text="@string/song_artist"
         android:textColor="@android:color/black"
         app:layout_constraintStart_toStartOf="@+id/tvOverviewSongName"
         app:layout_constraintTop_toBottomOf="@+id/tvOverviewSongName" />

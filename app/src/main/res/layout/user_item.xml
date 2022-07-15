@@ -24,7 +24,7 @@
         android:layout_alignParentTop="true"
         android:layout_toEndOf="@id/profile_image"
         android:layout_toRightOf="@id/profile_image"
-        android:text="username"
+        android:text="@string/username"
         android:textStyle="bold"
         android:textColor="@color/colorPrimary"
         android:textSize="18sp" />

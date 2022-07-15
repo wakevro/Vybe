@@ -2,19 +2,16 @@ package com.example.richard.vybe.Fragments;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
 import com.example.richard.vybe.Adapter.UserAdapter;
-import com.example.richard.vybe.Model.Chat;
 import com.example.richard.vybe.Model.Chatlist;
 import com.example.richard.vybe.Model.User;
 import com.example.richard.vybe.Notifications.Token;

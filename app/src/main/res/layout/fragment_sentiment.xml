@@ -11,12 +11,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/imageView2"
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/ltMusic"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-
-            android:src="@drawable/black_man_sitting_on_stool"/>
+            app:lottie_rawRes="@raw/music"
+            app:lottie_autoPlay="true"
+            app:lottie_repeatMode="reverse"
+            app:lottie_loop="true"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -45,14 +48,15 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:autofillHints="" />
 
             <Button
                 android:id="@+id/btnMood"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_marginTop="28dp"
-                android:text="GO"
+                android:text="@string/go"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="@id/etUserMood"
@@ -61,18 +65,6 @@
                 app:layout_constraintTop_toBottomOf="@+id/etUserMood" />
 
 
-            <!--            <pl.droidsonroids.gif.GifImageView-->
-<!--                android:id="@+id/ivMood"-->
-<!--                android:layout_width="60dp"-->
-<!--                android:layout_height="60dp"-->
-<!--                android:layout_marginTop="248dp"-->
-<!--                android:background="@drawable/rocket"-->
-<!--                app:layout_constraintEnd_toEndOf="@id/etUserMood"-->
-<!--                app:layout_constraintHorizontal_bias="0.498"-->
-
-<!--                app:layout_constraintStart_toStartOf="@id/etUserMood"-->
-<!--                app:layout_constraintTop_toBottomOf="@+id/etUserMood"/>-->
-
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -80,14 +72,5 @@
     </FrameLayout>
 
 
-    <!--    <ImageView-->
-<!--        android:id="@+id/ivMood"-->
-<!--        android:layout_width="50dp"-->
-<!--        android:layout_height="50dp"-->
-<!--        android:layout_marginTop="76dp"-->
-<!--        android:background="@drawable/rocket"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/etUserMood" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

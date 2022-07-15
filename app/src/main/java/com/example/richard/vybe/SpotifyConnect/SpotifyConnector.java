@@ -12,6 +12,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.richard.vybe.Model.EndPoints;
 import com.example.richard.vybe.Model.Song;
+import com.example.richard.vybe.R;
 import com.google.gson.Gson;
 import com.spotify.android.appremote.api.ConnectionParams;
 import com.spotify.android.appremote.api.Connector;
@@ -130,7 +131,7 @@ public class SpotifyConnector {
         try {
             mSpotifyAppRemote.getPlayerApi().play(songToPlay);
         } catch (NullPointerException e) {
-            Toast.makeText(mcontext.getApplicationContext(), "No Spotify App Installed.", Toast.LENGTH_SHORT).show();;
+            Toast.makeText(mcontext.getApplicationContext(), mcontext.getApplicationContext().getString(R.string.no_spotify), Toast.LENGTH_SHORT).show();;
         }
 
     }
@@ -151,7 +152,6 @@ public class SpotifyConnector {
 
                     public void onFailure(Throwable throwable) {
                         Log.e(TAG, ": SpotifyAppRemote Error: " + throwable.getMessage(), throwable);
-                        // Something went wrong when attempting to connect! Handle errors here
                     }
                 });
     }

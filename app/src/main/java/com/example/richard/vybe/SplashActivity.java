@@ -29,6 +29,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 
+/**
+ * Start Activity, authenticate Spotify
+ */
 public class SplashActivity extends AppCompatActivity {
 
     private String TAG = "SplashActivity";
@@ -69,7 +72,6 @@ public class SplashActivity extends AppCompatActivity {
             AuthorizationRequest request = builder.build();
             AuthorizationClient.openLoginActivity(this, REQUEST_CODE, request);
             return;
-
         }
 
 
@@ -156,7 +158,7 @@ public class SplashActivity extends AppCompatActivity {
         } else {
             Log.i(TAG, "STOPPED.");
             startErrorPage();
-            Toast.makeText(SplashActivity.this, "THERE IS AN ERROR!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(SplashActivity.this, getString(R.string.error) , Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -202,16 +204,20 @@ public class SplashActivity extends AppCompatActivity {
                 // Auth flow returned an error
                 case ERROR:
                     // Handle error response
-                    Log.d(TAG, "ERROR IN SWITCH CASE: " + response.getError());
-                    startErrorPage();
+                    if (response.getError().equals("NO_INTERNET_CONNECTION")) {
+                        Toast.makeText(this, "No internet connection!", Toast.LENGTH_SHORT).show();
+                        startMainActivity();
+                    } else {
+                        startErrorPage();
+                    }
+
                     break;
 
                 // Most likely auth flow was cancelled
                 default:
                     // Handle other cases
-                    Log.d(TAG, "DEFAULT IN SWITCH CASE");
+                    startErrorPage();
                     finish();
-                    // TODO: OPEN ERROR ACTIVITY.
             }
 
         }

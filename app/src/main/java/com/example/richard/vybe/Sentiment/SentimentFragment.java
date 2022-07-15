@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -40,7 +39,6 @@ public class SentimentFragment extends Fragment {
 
     private EditText etUserMood;
     private Button btnMood;
-    private TextView tvSentiment;
     private ViewPager2 viewPager2;
 
     private DatabaseReference sentimentDB;
@@ -63,9 +61,10 @@ public class SentimentFragment extends Fragment {
         viewPager2 = rootView.findViewById(R.id.pager);
 
         sharedPreferences = getActivity().getSharedPreferences("SPOTIFY", 0);
-        sentimentDB = FirebaseDatabase.getInstance().getReference().child(sharedPreferences.getString("username", "") + " " + sharedPreferences.getString("userid", "")).child("Sentiment");
+        sentimentDB = FirebaseDatabase.getInstance().getReference("Users").child(sharedPreferences.getString("username", "") + " " + sharedPreferences.getString("userid", "")).child("Sentiment");
 
         RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+
 
         btnMood.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,7 +76,7 @@ public class SentimentFragment extends Fragment {
                 String splChrs = "-/@#$%^&_+=()";
                 if (!sentence.isEmpty() && !sentence.startsWith(" ")) {
                     ProgressDialog progressDialog = new ProgressDialog(getContext());
-                    progressDialog.setCancelable(false);
+                    progressDialog.setCancelable(true);
                     progressDialog.setMessage("Loading...");
                     progressDialog.show();
 
@@ -95,13 +94,13 @@ public class SentimentFragment extends Fragment {
 
                                         sentiment = convertToNewRange(sentiment);
                                         sentimentDB.child("sentiment").setValue(sentiment);
-                                        etUserMood.setText("");
+                                        etUserMood.setText(R.string.empty);
                                         deleteTracks();
                                         progressDialog.dismiss();
                                         Intent intent = new Intent(getActivity().getBaseContext(), MainActivity.class);
                                         intent.putExtra("page_number", 2);  //2 or whatever you want
-//                                        intent.putExtra("sentiment", sentiment);
                                         getActivity().startActivityForResult(intent, 0);
+                                        progressDialog.dismiss();
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
@@ -116,7 +115,7 @@ public class SentimentFragment extends Fragment {
                     );
                     requestQueue.add(objectRequest);
                 } else {
-                    Toast.makeText(getContext(), "INVALID SENTENCE!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), getContext().getString(R.string.invalid_sentence), Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -148,14 +147,14 @@ public class SentimentFragment extends Fragment {
     }
 
     private void deleteTracks() {
-        databaseReference = FirebaseDatabase.getInstance().getReference().child(sharedPreferences.getString("username", "") + " " + sharedPreferences.getString("userid", ""));
+        databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(sharedPreferences.getString("username", "") + " " + sharedPreferences.getString("userid", ""));
         databaseReference.child("Tracks").removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
                 }
                 else {
-                    Toast.makeText(getActivity(), "Failed to delete!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), getActivity().getString(R.string.failed_to_delete), Toast.LENGTH_SHORT).show();
                 }
             }
         });

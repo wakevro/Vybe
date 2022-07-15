@@ -60,7 +60,7 @@ public class PlaylistService {
     public PlaylistService(RequestQueue queue, SharedPreferences sharedPreferences) {
         mqueue = queue;
         msharedPreferences = sharedPreferences;
-        songDB = FirebaseDatabase.getInstance().getReference().child(msharedPreferences.getString("username", "") + " " + msharedPreferences.getString("userid", "")).child("Tracks");
+        songDB = FirebaseDatabase.getInstance().getReference("Users").child(msharedPreferences.getString("username", "") + " " + msharedPreferences.getString("userid", "")).child("Tracks");
     }
 
     public ArrayList<Playlist> getPlaylists() {
@@ -200,7 +200,7 @@ public class PlaylistService {
 
     public void getSongs(final VolleyCallBack callBack) {
 
-        playlistItemDB = FirebaseDatabase.getInstance().getReference().child(msharedPreferences.getString("username", "") + " " + msharedPreferences.getString("userid", "")).child("Playlist");
+        playlistItemDB = FirebaseDatabase.getInstance().getReference("Users").child(msharedPreferences.getString("username", "") + " " + msharedPreferences.getString("userid", "")).child("Playlist");
 
         playlistItemDB.addValueEventListener(new ValueEventListener() {
             @Override

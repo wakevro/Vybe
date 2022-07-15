@@ -60,6 +60,7 @@ public class MapFragment extends Fragment {
 
     private String TAG = "MapFragment";
 
+    private final int MAX_RADIUS = 2000;
     public int radius = 1000;
     public String location = "";
 
@@ -85,7 +86,7 @@ public class MapFragment extends Fragment {
         // Initialize map fragment
 
         ProgressDialog progressDialog = new ProgressDialog(getContext());
-        progressDialog.setCancelable(false);
+        progressDialog.setCancelable(true);
         progressDialog.setMessage("Loading...");
         progressDialog.show();
 
@@ -105,20 +106,85 @@ public class MapFragment extends Fragment {
 
                 SharedPreferences sharedPreferences = getContext().getSharedPreferences("SPOTIFY", 0);
                 String currentUser = sharedPreferences.getString("username", "") + " " + sharedPreferences.getString("userid", "");
-                DatabaseReference databaseReference= FirebaseDatabase.getInstance().getReference("Users").child(currentUser);
-                databaseReference.addValueEventListener(new ValueEventListener() {
+
+                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(currentUser);
+                databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        location = snapshot.child("location").getValue().toString();
-                        Log.i(TAG, "Static location: " + location);
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                        String location = dataSnapshot.child("location").getValue().toString();
+
                         if (!location.equals("") && location != null) {
                             midLatLng = getLatLng(location);
-                            googleMap.clear();
                         } else {
-                            Toast.makeText(getContext(), "You do not have a Valid Location!", Toast.LENGTH_SHORT).show();
                             midLatLng = new LatLng(0, 0);
-                            googleMap.clear();
                         }
+
+
+                        // When map is loaded
+                        googleMap.clear();
+                        showMarkers(googleMap, radius);
+
+                        btnUp.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                if (radius >= 2000) {
+                                    radius = 2000;
+                                    Toast.makeText(getContext(), getContext().getString(R.string.maximum_radius), Toast.LENGTH_SHORT).show();
+                                } else {
+                                    radius += 200;
+                                }
+                                googleMap.clear();
+                                showMarkers(googleMap, radius);
+                                Log.i(TAG, "NEW RADIUS: " + radius);
+                            }
+                        });
+
+                        btnDown.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                if (radius <= 0) {
+                                    radius = 0;
+                                    Toast.makeText(getContext(), getContext().getString(R.string.minimum_radius), Toast.LENGTH_SHORT).show();
+                                } else {
+                                    radius -= 200;
+                                }
+                                googleMap.clear();
+                                showMarkers(googleMap, radius);
+                                Log.i(TAG, "NEW RADIUS: " + radius);
+                            }
+                        });
+
+                        btnLocation.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                if (midLatLng != null) {
+                                    googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(midLatLng, 14));
+                                } else {
+                                    Toast.makeText(getContext(), getContext().getString(R.string.no_valid_location), Toast.LENGTH_SHORT).show();
+                                    googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(0, 0), 14));
+                                }
+                            }
+                        });
+
+                        googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                            @Override
+                            public boolean onMarkerClick(@NonNull Marker marker) {
+                                Intent intent = new Intent(getContext(), MessageActivity.class);
+                                intent.putExtra("userFullId", marker.getTitle().toString());
+                                getContext().startActivity(intent);
+                                radius = 1000;
+                                googleMap.clear();
+                                return false;
+                            }
+                        });
+
+                        googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+                            @Override
+                            public void onMapClick(@NonNull LatLng latLng) {
+
+                            }
+                        });
 
                     }
 
@@ -128,71 +194,6 @@ public class MapFragment extends Fragment {
                     }
                 });
 
-                // When map is loaded
-                googleMap.clear();
-                showMarkers(googleMap, radius);
-                btnUp.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (radius >= 2000) {
-                            radius = 2000;
-                            Toast.makeText(getContext(), "Maximum Radius!", Toast.LENGTH_SHORT).show();
-                        } else {
-                            radius += 200;
-                        }
-                        googleMap.clear();
-                        showMarkers(googleMap, radius);
-                        Log.i(TAG, "NEW RADIUS: " + radius);
-                    }
-                });
-
-                btnDown.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (radius <= 0) {
-                            radius = 0;
-                            Toast.makeText(getContext(), "Minimum Radius!", Toast.LENGTH_SHORT).show();
-                        } else {
-                            radius -= 200;
-                        }
-                        googleMap.clear();
-                        showMarkers(googleMap, radius);
-                        Log.i(TAG, "NEW RADIUS: " + radius);
-                    }
-                });
-
-                btnLocation.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (midLatLng != null) {
-                            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(midLatLng, 14));
-                        } else {
-                            Toast.makeText(getContext(), "You do not have a Valid Location!", Toast.LENGTH_SHORT).show();
-//                            midLatLng = new LatLng(0, 0);
-                            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(0, 0), 14));
-                        }
-                    }
-                });
-
-                googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-                    @Override
-                    public boolean onMarkerClick(@NonNull Marker marker) {
-                        Toast.makeText(getContext(), "Clicked", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(getContext(), MessageActivity.class);
-                        intent.putExtra("userFullId", marker.getTitle().toString());
-                        getContext().startActivity(intent);
-                        radius = 1000;
-                        googleMap.clear();
-                        return false;
-                    }
-                });
-
-                googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-                    @Override
-                    public void onMapClick(@NonNull LatLng latLng) {
-
-                    }
-                });
 
             }
         });
@@ -208,6 +209,7 @@ public class MapFragment extends Fragment {
 
     private void showMarkers(GoogleMap googleMap, int radius) {
 
+
         final SharedPreferences sharedPreferences = getContext().getSharedPreferences("SPOTIFY", 0);
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Users");
         String currentUser = sharedPreferences.getString("username", "") + " " + sharedPreferences.getString("userid", "");
@@ -215,7 +217,7 @@ public class MapFragment extends Fragment {
         googleMap.clear();
 
         if (markers == null) {
-            databaseReference.addValueEventListener(new ValueEventListener() {
+            databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     markers = new ArrayList<>();
@@ -225,78 +227,70 @@ public class MapFragment extends Fragment {
                         final String getUser = snapshot.getKey();
 
                         if (snapshot.hasChild("id") && snapshot.hasChild("name") && snapshot.hasChild("profileImage") && snapshot.hasChild("location")) {
-                            User newUser = new User();
-                            Log.i(TAG, "Locations is: " + snapshot.child("location").getValue().toString());
                             String location  = snapshot.child("location").getValue().toString();
-                            String username = snapshot.child("name").getValue().toString();
-                            String userid = snapshot.child("id").getValue().toString();
-                            String imageURL = snapshot.child("profileImage").getValue().toString();
-                            Log.i(TAG, "GOTTEN USER: " + getUser);
-                            Log.i(TAG, "GOTTEN LOCATION: " + location);
-                            newUser.setDisplay_name(username);
-                            newUser.setId(userid);
-                            newUser.setProfileImageURL(imageURL);
 
-                            Log.i(TAG, "USER: " + newUser.getDisplay_name());
+                            // Eliminate users not in max radius
 
+                            if (isInMaxRadius(location, midLatLng)) {
+                                String username = snapshot.child("name").getValue().toString();
+                                String userid = snapshot.child("id").getValue().toString();
+                                String imageURL = snapshot.child("profileImage").getValue().toString();
+                                User newUser = new User();
+                                newUser.setDisplay_name(username);
+                                newUser.setId(userid);
+                                newUser.setProfileImageURL(imageURL);
 
-                            assert newUser != null;
-                            assert currentUser != null;
+                                assert newUser != null;
+                                assert currentUser != null;
 
-                            if (newUser != null) {
-                                users.add(newUser);
-                            }
+                                if (newUser != null) {
+                                    users.add(newUser);
+                                }
 
-                            if (getUser.equals(currentUser)) {
-                                midLatLng = getLatLng(location);
-                            }
+                                if (!getUser.equals(currentUser) && !location.equals("")) {
+                                    LatLng newLatLng = getLatLng(location);
 
-                            if (!getUser.equals(currentUser) && !location.equals("")) {
-                                LatLng newLatLng = getLatLng(location);
+                                    if (newLatLng != null) {
+                                        Marker marker = googleMap.addMarker(
+                                                new MarkerOptions()
+                                                        .position(newLatLng)
+                                                        .title(username + " " + userid)
+                                                        .visible(false)
+                                        );
 
-                                if (newLatLng != null) {
-                                    Log.i(TAG, "GOTTEN LATLNG: " +newLatLng);
+                                        BitmapDrawable bitmapdraw = (BitmapDrawable)getResources().getDrawable(R.drawable.man);
+                                        Bitmap b = bitmapdraw.getBitmap();
+                                        Bitmap smallMarker = Bitmap.createScaledBitmap(b, 100, 100, false);
+                                        if (imageURL.equals("")) {
+                                            marker.setIcon(BitmapDescriptorFactory.fromBitmap(smallMarker));
+                                        } else {
+                                            Bitmap imageBitmap = Bitmap.createScaledBitmap(getBitmapFromLink(imageURL), 100, 100, false);
+                                            Bitmap croppedImageBitmap = getCroppedBitmap(imageBitmap);
+                                            marker.setIcon(BitmapDescriptorFactory.fromBitmap(croppedImageBitmap));
+                                        }
 
-                                    Marker marker = googleMap.addMarker(
-                                            new MarkerOptions()
-                                                    .position(newLatLng)
-                                                    .title(username + " " + userid)
-                                                    .visible(false)
-                                    );
-
-                                    BitmapDrawable bitmapdraw = (BitmapDrawable)getResources().getDrawable(R.drawable.man);
-                                    Bitmap b = bitmapdraw.getBitmap();
-                                    Bitmap smallMarker = Bitmap.createScaledBitmap(b, 100, 100, false);
-                                    if (imageURL.equals("")) {
-                                        marker.setIcon(BitmapDescriptorFactory.fromBitmap(smallMarker));
-                                    } else {
-                                        Bitmap imageBitmap = Bitmap.createScaledBitmap(getBitmapFromLink(imageURL), 100, 100, false);
-                                        Bitmap croppedImageBitmap = getCroppedBitmap(imageBitmap);
-                                        marker.setIcon(BitmapDescriptorFactory.fromBitmap(croppedImageBitmap));
-                                    }
-
-                                    if (midLatLng != null) {
-                                        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(midLatLng, 14));
-                                    } else {
-                                        Toast.makeText(getContext(), "You do not have a Valid Location!", Toast.LENGTH_SHORT).show();
-                                        midLatLng = new LatLng(0, 0);
-                                        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(midLatLng, 14));
-                                    }
-
-                                    markers.add(marker);
-
-                                    for (Marker marker1 : markers) {
                                         if (midLatLng != null) {
-                                            Log.i(TAG, "Static location: " + midLatLng);
-                                            double calculatedDistance = distance(midLatLng.latitude, midLatLng.longitude, marker1.getPosition().latitude, marker1.getPosition().longitude);
-                                            Log.i(TAG, "CALCULATED DISTANCE: " + calculatedDistance);
-                                            if (calculatedDistance < (radius / 2)) {
-                                                marker1.setVisible(true);
+                                            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(midLatLng, 14));
+                                        } else {
+                                            Toast.makeText(getContext(), getContext().getString(R.string.no_valid_location), Toast.LENGTH_SHORT).show();
+                                            midLatLng = new LatLng(0, 0);
+                                            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(midLatLng, 14));
+                                        }
+
+                                        markers.add(marker);
+
+                                        for (Marker marker1 : markers) {
+                                            if (midLatLng != null) {
+                                                double calculatedDistance = distance(midLatLng.latitude, midLatLng.longitude, marker1.getPosition().latitude, marker1.getPosition().longitude);
+                                                if (calculatedDistance < (radius / 2)) {
+                                                    marker1.setVisible(true);
+                                                }
                                             }
                                         }
                                     }
                                 }
                             }
+
                         }
 
                     }
@@ -322,9 +316,7 @@ public class MapFragment extends Fragment {
             for (Marker marker1 : markers) {
                 if (midLatLng != null) {
                     double calculatedDistance = distance(midLatLng.latitude, midLatLng.longitude, marker1.getPosition().latitude, marker1.getPosition().longitude);
-                    Log.i(TAG, "CALCULATED DISTANCE AFTER SAVING MARKERS: " + calculatedDistance);
                     if (calculatedDistance < (radius / 2)) {
-                        Log.i(TAG, "Saved marker: " + marker1.getTitle());
                         Marker marker = googleMap.addMarker(
                                 new MarkerOptions()
                                         .position(marker1.getPosition())
@@ -340,9 +332,15 @@ public class MapFragment extends Fragment {
                                 if (user1.getProfileImageURL().equals("")) {
                                     marker.setIcon(BitmapDescriptorFactory.fromBitmap(smallMarker));
                                 } else {
-                                    Bitmap imageBitmap = Bitmap.createScaledBitmap(getBitmapFromLink(user1.getProfileImageURL()), 100, 100, false);
-                                    Bitmap croppedImageBitmap = getCroppedBitmap(imageBitmap);
-                                    marker.setIcon(BitmapDescriptorFactory.fromBitmap(croppedImageBitmap));
+                                    try {
+                                        Bitmap imageBitmap = Bitmap.createScaledBitmap(getBitmapFromLink(user1.getProfileImageURL()), 100, 100, false);
+                                        Bitmap croppedImageBitmap = getCroppedBitmap(imageBitmap);
+                                        marker.setIcon(BitmapDescriptorFactory.fromBitmap(croppedImageBitmap));
+                                    } catch (Exception e) {
+                                        Bitmap croppedImageBitmap = smallMarker;
+                                        marker.setIcon(BitmapDescriptorFactory.fromBitmap(croppedImageBitmap));
+                                    }
+
                                 }
                             }
                         }
@@ -446,6 +444,20 @@ public class MapFragment extends Fragment {
             }
         }
         return latLng;
+    }
+
+    private boolean isInMaxRadius(String location, LatLng midLatLng) {
+
+        LatLng newUserLatLng = getLatLng(location);
+
+        if (midLatLng != null) {
+            double calculatedDistance = distance(midLatLng.latitude, midLatLng.longitude, newUserLatLng.latitude, newUserLatLng.longitude);
+            if (calculatedDistance < (MAX_RADIUS / 2)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @Override

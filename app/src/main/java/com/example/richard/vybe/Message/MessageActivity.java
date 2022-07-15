@@ -84,7 +84,7 @@ public class MessageActivity extends AppCompatActivity {
 
 
         progressDialog = new ProgressDialog(MessageActivity.this);
-        progressDialog.setCancelable(false);
+        progressDialog.setCancelable(true);
         progressDialog.setMessage("Loading...");
         progressDialog.show();
 
@@ -126,13 +126,12 @@ public class MessageActivity extends AppCompatActivity {
                 String msg = etSend.getText().toString();
 
                 if (!msg.equals("")) {
-                    Log.i(TAG, "Send clicked");
                     sendMessage(currentUser, userFullId, msg);
                 } else {
-                    Toast.makeText(MessageActivity.this, "You can't send an empty message!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MessageActivity.this, getString(R.string.empty_message), Toast.LENGTH_SHORT).show();
                 }
 
-                etSend.setText("");
+                etSend.setText(R.string.empty);
             }
         });
 
@@ -156,10 +155,10 @@ public class MessageActivity extends AppCompatActivity {
                 user.setProfileImageURL(profileImageURL);
 
                 if (user.getStatus().equals("online")) {
-                    tvStatus.setText("Online");
+                    tvStatus.setText(R.string.online);
                     tvStatus.setTextColor(Color.parseColor("#FF4486E9"));
                 } else {
-                    tvStatus.setText("Offline");
+                    tvStatus.setText(R.string.offline);
                     tvStatus.setTextColor(Color.parseColor("#FF969798"));
                 }
                 username.setText(user.getDisplay_name());
@@ -307,7 +306,7 @@ public class MessageActivity extends AppCompatActivity {
                                 public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
                                     if (response.code() == 200){
                                         if (response.body().success != 1){
-                                            Toast.makeText(MessageActivity.this, "Failed!", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(MessageActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
                                         }
                                     }
                                 }

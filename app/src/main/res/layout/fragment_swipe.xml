@@ -14,44 +14,34 @@
         android:layout_alignParentTop="true"
         android:background="#F6F5F4">
 
+
+
         <ImageButton
             android:id="@+id/reload"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="35dp"
+            android:layout_height="30dp"
             android:layout_marginStart="25dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:background="@drawable/ic_sync_black_24dp"
-            android:contentDescription="Reload"
+            android:contentDescription="@string/reload"
             android:minWidth="48dp"
             android:minHeight="32dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageButton
-            android:id="@+id/settings"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="25dp"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/ic_settings_white_24dp"
-            android:contentDescription="Settings"
-            android:minWidth="48dp"
-            android:minHeight="32dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-    // TODO : USE PHOTOSHOP TO FIX MUSIC BACKGROUND
-    CHECK THE DIMENSION OF THE BLACKMAN SITTING ON A STOOL THEN
-    CREATE A NEW TRANSPARENT CAMVAS WITH THE SAME DIMENSION AND PASTE THE MUSIC
-    IMAGE IN THE MIDDLE.
-    android:scaleX="0.25"
-    android:scaleY="0.15"
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/ltMusic"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/orangemusic"
+        app:lottie_repeatMode="reverse" />
 
     <com.lorentzos.flingswipe.SwipeFlingAdapterView
         android:id="@+id/frame"

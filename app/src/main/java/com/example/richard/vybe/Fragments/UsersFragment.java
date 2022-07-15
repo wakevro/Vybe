@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,7 +53,7 @@ public class UsersFragment extends Fragment {
         mUsers = new ArrayList<>();
 
         ProgressDialog progressDialog = new ProgressDialog(getContext());
-        progressDialog.setCancelable(false);
+        progressDialog.setCancelable(true);
         progressDialog.setMessage("Loading...");
         progressDialog.show();
 
@@ -83,11 +84,11 @@ public class UsersFragment extends Fragment {
     private void searchUsers(String s) {
 
         final SharedPreferences sharedPreferences = getContext().getSharedPreferences("SPOTIFY", 0);
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Users");
 
         String currentUser = sharedPreferences.getString("username", "") + " " + sharedPreferences.getString("userid", "");
 
-        Query query = FirebaseDatabase.getInstance().getReference().orderByChild("search")
+        Query query = FirebaseDatabase.getInstance().getReference("Users").orderByChild("search")
                 .startAt(s)
                 .endAt(s+"\uf8ff");
 
@@ -112,7 +113,7 @@ public class UsersFragment extends Fragment {
                         assert user != null;
                         assert currentUser != null;
 
-                        if (!getUser.equals(currentUser) && !getUser.equals("Chats")) {
+                        if (!getUser.equals(currentUser) && !getUser.equals("Chats") && !getUser.equals("ChatList") && !getUser.equals("Tokens")) {
                             mUsers.add(user);
                         }
                     }
@@ -133,7 +134,7 @@ public class UsersFragment extends Fragment {
     private void readUsers() {
 
         final SharedPreferences sharedPreferences = getContext().getSharedPreferences("SPOTIFY", 0);
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Users");
 
         String currentUser = sharedPreferences.getString("username", "") + " " + sharedPreferences.getString("userid", "");
 
@@ -161,7 +162,7 @@ public class UsersFragment extends Fragment {
                             assert user != null;
                             assert currentUser != null;
 
-                            if (!getUser.equals(currentUser) && !getUser.equals("Chats")) {
+                            if (!getUser.equals(currentUser) && !getUser.equals("Chats") && !getUser.equals("ChatList") && !getUser.equals("Tokens")) {
                                 mUsers.add(user);
                             }
                         }

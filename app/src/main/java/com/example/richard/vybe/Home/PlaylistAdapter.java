@@ -43,8 +43,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.MyView
 
             this.context = context;
             sharedPreferences = context.getSharedPreferences("SPOTIFY", 0);
-            databaseReference = FirebaseDatabase.getInstance().getReference().child(sharedPreferences.getString("username", "") + " " + sharedPreferences.getString("userid", ""));
-
+            databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(sharedPreferences.getString("username", "") + " " + sharedPreferences.getString("userid", ""));
             itemView.setOnClickListener(this);
 
             tvPlaylistName = itemView.findViewById(R.id.tvPlaylistName);
@@ -54,6 +53,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.MyView
 
         @Override
         public void onClick(View view) {
+
             databaseReference.child("Playlist").child("id").setValue(playlist.getId());
             databaseReference.child("Playlist").child("name").setValue(playlist.getName());
             databaseReference.child("Playlist").child("tracks").setValue(playlist.getTotalTracks());
@@ -62,8 +62,8 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.MyView
             editor.putString("playlist", playlist.getId());
             editor.putString("playlistname", playlist.getName());
             editor.apply();
-
             Intent intent = new Intent(context, PlaylistItemsActivity.class);
+            intent.putExtra("playlistTitle", playlist.getName());
             context.startActivity(intent
             );
 

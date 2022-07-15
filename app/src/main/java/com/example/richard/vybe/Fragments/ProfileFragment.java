@@ -17,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.example.richard.vybe.Model.User;
@@ -73,13 +74,13 @@ public class ProfileFragment extends Fragment {
                 if (!etLocation.getText().toString().equals("")) {
                     DatabaseReference locationReference = FirebaseDatabase.getInstance().getReference("Users").child(currentUser);
                     locationReference.child("location").setValue(etLocation.getText().toString());
-                    etLocation.setText("");
+                    etLocation.setText(R.string.empty);
                 }
             }
         });
 
         ProgressDialog progressDialog = new ProgressDialog(getContext());
-        progressDialog.setCancelable(false);
+        progressDialog.setCancelable(true);
         progressDialog.setMessage("Loading...");
         progressDialog.show();
 
@@ -149,7 +150,7 @@ public class ProfileFragment extends Fragment {
         bottomSheetDialog.show();
 
         TextView tvCancel = bottomSheetView.findViewById(R.id.tvCancel);
-        ImageView ivSpotify = bottomSheetView.findViewById(R.id.ivSpotify);
+        LottieAnimationView ltSpotify = bottomSheetView.findViewById(R.id.ltSpotify);
         TextView tvRedirect = bottomSheetView.findViewById(R.id.tvRedirect);
         TextView tvRestart = bottomSheetView.findViewById(R.id.tvRestart);
 
@@ -161,7 +162,7 @@ public class ProfileFragment extends Fragment {
         });
 
         if (isPackageInstalled(packageName, packageManager)) {
-            ivSpotify.setOnClickListener(new View.OnClickListener() {
+            ltSpotify.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent launchIntent = getContext().getPackageManager().getLaunchIntentForPackage(packageName);
@@ -172,10 +173,10 @@ public class ProfileFragment extends Fragment {
             });
         } else {
 
-            tvRedirect.setText("You will be redirect to Spotify Authentication.");
-            tvRestart.setText("Kindly make changes.");
+            tvRedirect.setText(R.string.you_will_be_redirected_to_spotify_authentication);
+            tvRestart.setText(R.string.kindly_make_changes);
 
-            ivSpotify.setOnClickListener(new View.OnClickListener() {
+            ltSpotify.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent logOutIntent = new Intent(getActivity(), SplashActivity.class);

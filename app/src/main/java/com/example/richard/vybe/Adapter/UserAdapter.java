@@ -16,9 +16,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
-import com.example.richard.vybe.Fragments.ChatsFragment;
-import com.example.richard.vybe.Fragments.ProfileFragment;
-import com.example.richard.vybe.Fragments.UsersFragment;
 import com.example.richard.vybe.Message.MessageActivity;
 import com.example.richard.vybe.Model.Chat;
 import com.example.richard.vybe.Model.User;
@@ -54,7 +51,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.user_item, parent, false);
-        return new UserAdapter.ViewHolder(view);
+        return new ViewHolder(view);
     }
 
     @Override
@@ -128,7 +125,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(mContext, MessageActivity.class);
-
                 intent.putExtra("userFullId", user.getDisplay_name() + " " + user.getId());
                 mContext.startActivity(intent);
             }
@@ -184,7 +180,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
                 switch (theLastMessage) {
                     case "default" :
-                        last_msg.setText("No Message");
+                        last_msg.setText(R.string.no_message);
                         break;
 
                     default:

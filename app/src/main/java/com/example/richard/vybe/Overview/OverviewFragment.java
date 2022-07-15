@@ -68,7 +68,6 @@ public class OverviewFragment extends Fragment {
     private DatabaseReference databaseReference;
     private Button btnStartPlaylist;
 
-
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.activity_overview, container, false);
 
@@ -122,10 +121,9 @@ public class OverviewFragment extends Fragment {
 
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("SPOTIFY", 0);
 
-        String userID = FirebaseDatabase.getInstance().getReference().child(sharedPreferences.getString("userid", "")).toString();
-        userID = userID.replaceFirst("https://vybe-6c7cb-default-rtdb.firebaseio.com/", "");
+        String userID = FirebaseDatabase.getInstance().getReference("Users").child(sharedPreferences.getString("userid", "")).toString();
+        userID = userID.replaceFirst("https://vybe-6c7cb-default-rtdb.firebaseio.com/Users/", "");
         createPlaylist(userID, playlistName);
-
 
         // Switch to HomeFragment
 
@@ -137,11 +135,12 @@ public class OverviewFragment extends Fragment {
     }
 
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("SPOTIFY", 0);
-        mDatabase = FirebaseDatabase.getInstance().getReference().child(sharedPreferences.getString("username", "") + " " + sharedPreferences.getString("userid", "")).child("Tracks");
+        mDatabase = FirebaseDatabase.getInstance().getReference("Users").child(sharedPreferences.getString("username", "") + " " + sharedPreferences.getString("userid", "")).child("Tracks");
         spotifyConnector = new SpotifyConnector(getContext());
     }
 
@@ -272,14 +271,14 @@ public class OverviewFragment extends Fragment {
     }
 
     private void deleteTracks() {
-        databaseReference = FirebaseDatabase.getInstance().getReference().child(sharedPreferences.getString("username", "") + " " + sharedPreferences.getString("userid", ""));
+        databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(sharedPreferences.getString("username", "") + " " + sharedPreferences.getString("userid", ""));
         databaseReference.child("Tracks").removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
                 }
                 else {
-                    Toast.makeText(getActivity(), "Failed to delete!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), getActivity().getString(R.string.failed_to_delete), Toast.LENGTH_SHORT).show();
                 }
             }
         });

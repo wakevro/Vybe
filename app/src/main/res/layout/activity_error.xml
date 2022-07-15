@@ -7,27 +7,43 @@
     android:layout_height="match_parent"
     tools:context=".ErrorActivity">
 
-    <ImageView
-        android:id="@+id/ivError"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginTop="240dp"
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/ltError"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_marginTop="200dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.466"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:background="@drawable/warning" />
+        app:lottie_rawRes="@raw/error"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_repeatMode="restart"
+        />
 
     <TextView
         android:id="@+id/tvError"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="70dp"
-        android:text="Uh oh! An error occurred! Try restarting."
+        android:layout_marginTop="40dp"
+        android:text="@string/uh_oh_an_error_occurred_try_restarting"
+        android:textColor="@android:color/black"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivError" />
+        app:layout_constraintTop_toBottomOf="@+id/ltError" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/check_your_internet_connection"
+        app:layout_constraintEnd_toEndOf="@+id/tvError"
+        app:layout_constraintStart_toStartOf="@+id/tvError"
+        app:layout_constraintTop_toBottomOf="@+id/tvError" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

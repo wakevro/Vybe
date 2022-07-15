@@ -75,5 +75,8 @@ dependencies {
     // Spotify
     implementation project(':spotify-app-remote-release-0.6.1')
     implementation 'com.spotify.android:auth:1.2.5' // Maven dependency
+
+    // Lottie
+    implementation 'com.airbnb.android:lottie:3.7.0'
 }
 

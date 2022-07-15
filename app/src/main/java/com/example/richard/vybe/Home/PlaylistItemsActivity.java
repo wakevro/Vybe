@@ -2,6 +2,9 @@ package com.example.richard.vybe.Home;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -26,6 +29,9 @@ public class PlaylistItemsActivity extends AppCompatActivity {
     private SharedPreferences sharedPreferences;
     private PlaylistService playlistService;
 
+    public TextView tvPlaylistTitle;
+    public Button btnPlaylistBack;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +47,19 @@ public class PlaylistItemsActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(false);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
+
+        String playlistTitle = getIntent().getStringExtra("playlistTitle");
+
+        tvPlaylistTitle = this.findViewById(R.id.tvPlaylistTitle);
+        btnPlaylistBack = this.findViewById(R.id.btnPlaylistBack);
+
+        tvPlaylistTitle.setText(playlistTitle);
+        btnPlaylistBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
     }
 
     @Override
