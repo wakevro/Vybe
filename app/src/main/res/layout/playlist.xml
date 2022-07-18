@@ -39,4 +39,13 @@
         android:text="@string/song_size"
         app:layout_constraintStart_toStartOf="@+id/tvPlaylistName"
         app:layout_constraintTop_toBottomOf="@+id/tvPlaylistName" />
+
+    <ImageView
+        android:id="@+id/ivMore"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/more"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tvPlaylistName" />
 </androidx.constraintlayout.widget.ConstraintLayout>

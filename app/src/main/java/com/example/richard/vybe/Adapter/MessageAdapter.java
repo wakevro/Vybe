@@ -96,10 +96,9 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 
         holder.showMessage.setText(chat.getMessage());
 
-
-        holder.showMessage.setOnClickListener(new View.OnClickListener() {
+        holder.showMessage.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public void onClick(View view) {
+            public boolean onLongClick(View view) {
                 Dialog dialog = new Dialog(mContext);
                 dialog.setContentView(R.layout.layout_reactions);
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
@@ -259,9 +258,9 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                     }
                 });
                 dialog.show();
+                return false;
             }
         });
-
 
         if (imageurl.equals("")) {
             Glide.with(mContext)

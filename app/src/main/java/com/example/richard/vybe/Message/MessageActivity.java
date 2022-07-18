@@ -118,6 +118,11 @@ public class MessageActivity extends AppCompatActivity {
         userFullId = intent.getStringExtra("userFullId");
         sharedPreferences = this.getSharedPreferences("SPOTIFY", 0);
         currentUser = sharedPreferences.getString("username", "") + " " + sharedPreferences.getString("userid", "");
+        String playlistLink = sharedPreferences.getString("playlistLink", "");
+        etSend.setText(playlistLink);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("playlistLink", "");
+        editor.apply();
 
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override

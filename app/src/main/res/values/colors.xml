@@ -11,4 +11,5 @@
     <color name="white">#F1F3F6</color>
     <color name="theme_color">#2176FF</color>
     <color name="theme_color_8">#142176FF</color>
+    <color name="link">#3E85F1</color>
 </resources>

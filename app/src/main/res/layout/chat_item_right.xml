@@ -29,6 +29,8 @@
             android:paddingStart="15dp"
             android:paddingBottom="15dp"
             android:text="@string/hello"
+            android:autoLink="all"
+            android:textColorLink="@color/link"
             android:textColor="#fff"
             android:textSize="18sp" />
 
