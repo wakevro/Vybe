@@ -29,6 +29,9 @@
             android:name=".Message.MessageActivity"
             android:exported="false" />
         <activity
+            android:name=".ErrorActivity"
+            android:exported="false" />
+        <activity
             android:name=".Profile.ProfileActivity"
             android:exported="false" />
         <activity

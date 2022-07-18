@@ -30,6 +30,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class HomeFragment extends Fragment {
 
@@ -44,8 +45,10 @@ public class HomeFragment extends Fragment {
     private PlaylistService playlistService;
 
     String userProfileImageURL;
+    String timeOfDay;
     private User user;
     private TextView tvUsername;
+    private TextView tvGreeting;
     private ImageView ivProfileImage;
 
 
@@ -70,7 +73,11 @@ public class HomeFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
 
         tvUsername = rootView.findViewById(R.id.tvUsername);
+        tvGreeting = rootView.findViewById(R.id.tvGreeting);
         ivProfileImage = rootView.findViewById(R.id.ivProfileHome);
+
+        timeOfDay = getTime();
+        tvGreeting.setText("Good " + timeOfDay + ",");
 
         ivProfileImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -159,4 +166,25 @@ public class HomeFragment extends Fragment {
         mAdapter.notifyDataSetChanged();
         recyclerView.setAdapter(mAdapter);
     }
+
+    private String getTime() {
+
+        Calendar calendar = Calendar.getInstance();
+        int timeOfDay = calendar.get(Calendar.HOUR_OF_DAY);
+
+        if (timeOfDay >= 0 && timeOfDay < 12) {
+            return "morning";
+        }
+        else if (timeOfDay >= 12 && timeOfDay < 16) {
+            return "afternoon";
+        } else if (timeOfDay >= 16 && timeOfDay < 21) {
+            return "evening";
+        }
+        else if (timeOfDay >= 21 && timeOfDay < 24) {
+            return "night";
+        }
+        else {
+            return "day";
+        }
+       }
 }
