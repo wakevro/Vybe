@@ -1,6 +1,10 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
 
+def apikeyPropertiesFile = rootProject.file("apikey.properties")
+def apikeyProperties = new Properties()
+apikeyProperties.load(new FileInputStream(apikeyPropertiesFile))
+
 android {
     compileSdkVersion 28
     defaultConfig {
@@ -10,7 +14,10 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
-        manifestPlaceholders = [MAPS_API_KEY: "AIzaSyCRM41vuFq5mgbaLTNMUTPhQtF76xjaF5o", version: versionCode]
+
+        // should correspond to key/value pairs inside the file
+        buildConfigField("String", "MAPS_API_KEY", apikeyProperties['MAPS_API_KEY'])
+        buildConfigField("String", "FIREBASE_KEY", apikeyProperties['FIREBASE_KEY'])
     }
     buildTypes {
         release {
@@ -33,7 +40,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'com.lorentzos.swipecards:library:1.0.9'
     implementation 'com.android.volley:volley:1.1.1'
-//    implementation 'com.spotify.android:auth:1.1.0'
+
     implementation 'com.fasterxml.jackson.core:jackson-core:2.8.5'
     implementation 'com.fasterxml.jackson.core:jackson-annotations:2.8.5'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.8.5'
