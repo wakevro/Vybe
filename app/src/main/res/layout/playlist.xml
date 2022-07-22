@@ -3,8 +3,18 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/clPlaylist"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
+
+    <View
+        android:id="@+id/splitUpLine"
+        android:layout_width="wrap_content"
+        android:layout_height="5dp"
+        android:background="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/clPlaylist" />
 
     <ImageView
         android:id="@+id/ivPlaylistImage"
@@ -45,6 +55,8 @@
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_marginEnd="20dp"
+        android:paddingStart="40dp"
+        android:paddingEnd="40dp"
         android:background="@drawable/more"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tvPlaylistName" />

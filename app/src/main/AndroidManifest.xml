@@ -23,28 +23,25 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="BuildConfig.MAPS_API_KEY"/>
+            android:value="${MAPS_API_KEY}"/>
 
         <activity
-            android:name=".Message.MessageActivity"
+            android:name=".message.MessageActivity"
             android:exported="false" />
         <activity
             android:name=".ErrorActivity"
             android:exported="false" />
         <activity
-            android:name=".Profile.ProfileActivity"
+            android:name=".profile.ProfileActivity"
             android:exported="false" />
         <activity
-            android:name=".Authenticate.AuthenticateActivity"
+            android:name=".home.PlaylistItemsActivity"
             android:exported="false" />
         <activity
-            android:name=".Home.PlaylistItemsActivity"
-            android:exported="false" />
-        <activity
-            android:name=".Swipe.MainActivity"
+            android:name=".home.MainActivity"
             tools:ignore="Instantiatable" />
         <activity
-            android:name=".Sentiment.SentimentFragment"
+            android:name=".home.fragment.SentimentFragment"
             tools:ignore="Instantiatable" />
         <activity android:name=".SplashActivity">
             <intent-filter>
@@ -55,7 +52,7 @@
         </activity>
 
         <service
-            android:name=".Notifications.MyFirebaseMessaging"
+            android:name=".message.notifications.FirebaseNotification"
             android:enabled="true"
             android:exported="true">
             <intent-filter>

@@ -13,10 +13,10 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.richard.vybe.Model.EndPoints;
-import com.example.richard.vybe.Model.User;
-import com.example.richard.vybe.SpotifyConnect.UserService;
-import com.example.richard.vybe.Swipe.MainActivity;
+import com.example.richard.vybe.model.EndPoints;
+import com.example.richard.vybe.model.User;
+import com.example.richard.vybe.spotifyConnect.UserService;
+import com.example.richard.vybe.home.MainActivity;
 import com.google.gson.Gson;
 import com.spotify.sdk.android.auth.AuthorizationClient;
 import com.spotify.sdk.android.auth.AuthorizationRequest;
@@ -29,9 +29,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-/**
- * Start Activity, authenticate Spotify
- */
 public class SplashActivity extends AppCompatActivity {
 
     private String TAG = "SplashActivity";

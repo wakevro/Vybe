@@ -24,14 +24,14 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
+            android:autoLink="all"
             android:background="@drawable/background_right"
             android:padding="10dp"
             android:paddingStart="15dp"
             android:paddingBottom="15dp"
             android:text="@string/hello"
-            android:autoLink="all"
-            android:textColorLink="@color/link"
             android:textColor="#fff"
+            android:textColorLink="@color/link"
             android:textSize="18sp" />
 
         <TextView
