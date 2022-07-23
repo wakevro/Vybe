@@ -121,6 +121,6 @@ This is a Spotify playlist generator app that generates music based on user's mo
 
 <p float="left">
   <img src="https://imgur.com/sdvIPY5.png" width=200 />
-  <img src="https://imgur.com/5wfyTAS.png" width=200 />
+  <img src="https://imgur.com/HyxSDhL.png" width=200 />
   <img src="https://imgur.com/Yh8Wl0Z.png" width=200 />
 </p>
